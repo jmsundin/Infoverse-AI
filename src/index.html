@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/dist/output.css" rel="stylesheet">
+    <title>Visualize Wikidata</title>
+</head>
+<body>
+    
+<div id="root"></div>
+<!-- React CDN (Content Delivery Network) will send the React 
+    library to the client's system -->
+<!-- unpkg allows you to use load things from npm via a CDN -->
+<!-- react or react-dom are the package names; after the @ is the version -->
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+<!-- App.js script -->
+<!-- to use Parcel, the type attribute needs to be module -->
+<script type="module" src="./index.js"></script>
+</body>
+</html>
