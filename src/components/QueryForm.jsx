@@ -1,57 +1,115 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useState } from "react";
 import { SPARQLQueryDispatcher } from "../SPARQLQuery/SPARQLQueryDispatcher";
 import "./Dropdown.css";
 
-import { sparqlQueryComputerScience } from "../SPARQLQuery/SPARQLQueries";
+import queryData from "../SPARQLQuery/queryData";
 
 const QueryForm = (props) => {
-  const endpointUrl = "https://query.wikidata.org/sparql";
-  // sparl query that retrieves the items that are subclasses of computer science
-
-  const topics = [
-    "Computer Science",
-    "Mathematics",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Medicine",
-    "Artificial Intelligence",
-    "Machine Learning",
-    "Deep Learning",
-    "Natural Language Processing",
-    "Computer Vision",
-    "Data Science",
-  ];
-
+  const [chosenChart, setChosenChart] = useState("Graph (Network Diagram)");
   const [chosenTopic, setChosenTopic] = useState("Computer Science");
-  const topicList = topics.map((topic) => (
-    <button key={topic} onClick={() => setChosenTopic(topic)}>
-      {topic}
-    </button>
-  ));
+  const [chosenProperty, setChosenProperty] = useState("Subclass of");
+
+  const wikidataItems = queryData.wikidataItems;
+  const wikidataProperties = queryData.wikidataProperties;
+
+  let query = `SELECT ?item ?itemLabel ?child1 ?child1Label ?child2 ?child2Label WHERE {
+    ?item wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
+    ?child1 wdt:${wikidataProperties[chosenProperty]} ?item .
+    ?child2 wdt:${wikidataProperties[chosenProperty]} ?child1 .
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
+  }
+  LIMIT 100`;
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-    queryDispatcher.query(sparqlQueryComputerScience).then((json) => {
-      props.onQuerySubmit(json);
+    // const json = queryData.response;
+    // props.onQuerySubmit(json, chosenChart);
+    const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
+    queryDispatcher.query(query).then((json) => {
+      // console.log(typeof json);
+      props.onQuerySubmit(json, chosenChart);
     });
   };
 
-  return (
-    <form onSubmit={onSubmitHandler}>
-      <span>Select a Topic to Explore</span>
+  const chartDropdownMenu = (
+    <>
+      <label>Pick a Chart Type</label>
       <br></br>
       <div className="dropdown">
-        <button className="dropbtn" type="text">
+        <button className="dropdownbtn" type="text">
+          {chosenChart}
+        </button>
+        <div className="dropdown-content">
+          {queryData.charts.map((chart) => (
+            <button key={chart} name={chart} onClick={(event) => setChosenChart(event.target.name)}>
+              {chart}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
+  const topicDropdownMenu = (
+    <>
+      <label htmlFor="dropdown-div">Select a Topic to Explore</label>
+      <br></br>
+      <div id="drowdown-div" className="dropdown">
+        <button className="dropdownbtn" type="text">
           {chosenTopic}
         </button>
-        <div className="dropdown-content">{topicList}</div>
+        <div className="dropdown-content">
+          {queryData.topics.map((topic) => (
+            <button key={topic} name={topic} onClick={(event) => setChosenTopic(event.target.name)}>
+              {topic}
+            </button>
+          ))}
+        </div>
       </div>
-      <button className="dropbtn" type="submit">
-        Explore
-      </button>
-    </form>
+    </>
+  );
+
+  const propertyDropdownMenu = (
+    <>
+      <label htmlFor="dropdown-div">Select a Property</label>
+      <br></br>
+      <div id="drowdown-div" className="dropdown">
+        <button className="dropdownbtn" type="text">
+          {chosenProperty}
+        </button>
+        <div className="dropdown-content">
+          {queryData.properties.map((property) => (
+            <button key={property} name={property} onClick={(event) => setChosenProperty(event.target.name)}>
+              {property}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
+  const exploreButton = (
+    <button className="dropdownbtn" onClick={onSubmitHandler}>
+      Explore
+    </button>
+  );
+
+  return (
+      <table>
+        <tbody>
+          <tr>
+            <td>{chartDropdownMenu}</td>
+            <td>{topicDropdownMenu}</td>
+            <td>{propertyDropdownMenu}</td>
+            <td>
+              <br></br>
+              {exploreButton}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
   );
 };
 
