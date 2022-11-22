@@ -5,18 +5,23 @@ import QueryForm from "./components/QueryForm";
 import Canvas from "./components/Canvas";
 
 const App = () => {
-  const [json_response, setJsonResponse] = useState(null);
+  const [res, setJsonResponse] = useState(null);
   const [chosenChart, setChosenChart] = useState("Graph (Network Diagram)");
-  const onQuerySubmit = (json, chart) => {
+  const [chosenTopic, setChosenTopic] = useState("Computer Science");
+  const [chosenProperty, setChosenProperty] = useState("Subclass of");
+
+  const onQuerySubmit = (res, chart, chosenTopic, chosenProperty) => {
     setChosenChart(chart);
-    setJsonResponse(json);
+    setJsonResponse(res);
+    setChosenTopic(chosenTopic);
+    setChosenProperty(chosenProperty);
   };
 
   return (
     <div className="App">
       <NavMenu />
       <QueryForm onQuerySubmit={onQuerySubmit} />
-      <Canvas items={json_response} chart={chosenChart} />
+      <Canvas items={res} chart={chosenChart} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />
     </div>
   );
 };

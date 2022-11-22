@@ -2,25 +2,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 const Table = (props) => {
   const data = props.items; // data is a object
-  let columns = data.head.vars;
-  let bindingsSet = new Set(data.results.bindings);
-  let bindings = Array.from(bindingsSet);
+  const columns = data != null ? data.head.vars : [];
+  const rows = data != null ? data.results.bindings : [];
+  
+  // console.log("columns: ", columns);
+  // console.log("rows: ", rows);
 
   // create a table from the data
   const table = (
     <table>
       <thead>
         <tr>
-          {columns.map((column) => (
+          {columns && columns.map((column) => (
             <th key={column}>{column}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {bindings.map((binding) => (
+        {rows && rows.map((item) => (
           <tr key={uuidv4()}>
-            {columns.map((column) => (
-              <td key={column}>{binding[column].value}</td>
+            {columns && columns.map((column) => (
+              <td key={column}>{item[column].value}</td>
             ))}
           </tr>
         ))}

@@ -7,6 +7,6 @@ export class SPARQLQueryDispatcher {
     const fullUrl = this.endpoint + "?query=" + encodeURIComponent(sparqlQuery);
     const headers = { Accept: "application/sparql-results+json" };
 
-    return fetch(fullUrl, { headers }).then((body) => body.json());
+    return fetch(fullUrl, { headers }).then((response) => response.json());
   }
 }

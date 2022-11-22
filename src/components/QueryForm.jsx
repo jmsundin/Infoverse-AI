@@ -26,9 +26,8 @@ const QueryForm = (props) => {
     // const json = queryData.response;
     // props.onQuerySubmit(json, chosenChart);
     const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
-    queryDispatcher.query(query).then((json) => {
-      // console.log(typeof json);
-      props.onQuerySubmit(json, chosenChart);
+    queryDispatcher.query(query).then((res) => {
+      props.onQuerySubmit(res, chosenChart, chosenTopic, chosenProperty);
     });
   };
 
