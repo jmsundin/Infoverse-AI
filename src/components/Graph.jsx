@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
+import transformData from "../Helper/transformData";
 
 // d3 force graph
 function Graph(props) {
@@ -17,14 +18,14 @@ function Graph(props) {
   const nodes = root.descendants();
   const links = root.links();
 
-  console.log("nodesAndChildren: ", nodesAndChildren);
+  // console.log("nodesAndChildren: ", nodesAndChildren);
   // console.log("root: ", root);
   // console.log("nodes: ", nodes);
   // console.log("links: ", links);
 
   const dimensions = {
-    width: 600,
-    height: 300,
+    width: window.innerWidth * 0.9,
+    height: window.innerHeight * 0.9,
     margin: { top: 30, right: 30, bottom: 30, left: 60 },
   };
   const { width, height, margin } = dimensions; // chart dimensions
@@ -45,7 +46,7 @@ function Graph(props) {
         d3
           .forceLink(links)
           .id((d) => d.id)
-          .distance(0)
+          .distance(0.1 * width)
           .strength(1)
       )
       .force("charge", d3.forceManyBody().strength(-50))
@@ -70,7 +71,7 @@ function Graph(props) {
       .join("circle")
       .attr("fill", (d) => (d.children ? null : "#000"))
       .attr("stroke", (d) => (d.children ? null : "#fff"))
-      .attr("r", 3.5)
+      .attr("r", 5)
       .call(drag(simulation));
 
     function drag(simulation) {
@@ -90,14 +91,17 @@ function Graph(props) {
         d.fy = null;
       }
 
+      // TODO: edit zoomed function
+      function zoomed(event) {
+        svg.attr("transform", event.transform);
+      }
+
       return d3
         .drag()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended);
     }
-
-    node.append("title").text((d) => d.data.name);
 
     simulation.on("tick", () => {
       link
@@ -111,24 +115,6 @@ function Graph(props) {
   }, [nodes, links]);
 
   return <svg ref={svgRef} width={svgWidth} height={svgHeight}></svg>;
-}
-
-// transform data into nodes and links
-function transformData(chosenTopic, columns, rows) {
-  let nodesAndChildren = { name: chosenTopic, children: [] };
-
-  // create nodes
-  rows.forEach((row) => {
-    // create a node for each column
-    columns.forEach((column) => {
-      // create a node for each row
-      const node = row[column].value;
-      // add node to nodesAndChildren
-      nodesAndChildren.children.push({ name: node });
-    });
-  });
-
-  return nodesAndChildren;
 }
 
 export default Graph;

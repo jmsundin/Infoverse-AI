@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { SPARQLQueryDispatcher } from "../SPARQLQuery/SPARQLQueryDispatcher";
 import "./Dropdown.css";
@@ -21,10 +21,16 @@ const QueryForm = (props) => {
   }
   LIMIT 100`;
 
+  // const onChangeHandler = (event) => {
+  //   event.preventDefault();
+  //   const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
+  //   queryDispatcher.query(query).then((res) => {
+  //     props.onQuerySubmit(res, chosenChart, chosenTopic, chosenProperty);
+  //   });
+  // };
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    // const json = queryData.response;
-    // props.onQuerySubmit(json, chosenChart);
     const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
     queryDispatcher.query(query).then((res) => {
       props.onQuerySubmit(res, chosenChart, chosenTopic, chosenProperty);
@@ -41,7 +47,14 @@ const QueryForm = (props) => {
         </button>
         <div className="dropdown-content">
           {queryData.charts.map((chart) => (
-            <button key={chart} name={chart} onClick={(event) => setChosenChart(event.target.name)}>
+            <button
+              key={chart}
+              name={chart}
+              onClick={(event) => {
+                setChosenChart(event.target.name);
+                // onChangeHandler(event);
+              }}
+            >
               {chart}
             </button>
           ))}
@@ -60,7 +73,14 @@ const QueryForm = (props) => {
         </button>
         <div className="dropdown-content">
           {queryData.topics.map((topic) => (
-            <button key={topic} name={topic} onClick={(event) => setChosenTopic(event.target.name)}>
+            <button
+              key={topic}
+              name={topic}
+              onClick={(event) => {
+                setChosenTopic(event.target.name);
+                // onChangeHandler(event);
+              }}
+            >
               {topic}
             </button>
           ))}
@@ -79,7 +99,14 @@ const QueryForm = (props) => {
         </button>
         <div className="dropdown-content">
           {queryData.properties.map((property) => (
-            <button key={property} name={property} onClick={(event) => setChosenProperty(event.target.name)}>
+            <button
+              key={property}
+              name={property}
+              onClick={(event) => {
+                setChosenProperty(event.target.name);
+                // onChangeHandler(event);
+              }}
+            >
               {property}
             </button>
           ))}
@@ -95,20 +122,19 @@ const QueryForm = (props) => {
   );
 
   return (
-      <table>
-        <tbody>
-          <tr>
-            <td>{chartDropdownMenu}</td>
-            <td>{topicDropdownMenu}</td>
-            <td>{propertyDropdownMenu}</td>
-            <td>
-              <br></br>
-              {exploreButton}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
+    <table>
+      <tbody>
+        <tr>
+          <td>{chartDropdownMenu}</td>
+          <td>{topicDropdownMenu}</td>
+          <td>{propertyDropdownMenu}</td>
+          <td>
+            <br></br>
+            {exploreButton}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 

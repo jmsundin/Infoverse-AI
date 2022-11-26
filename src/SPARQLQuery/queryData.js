@@ -1,6 +1,11 @@
 const queryData = {
   endpointUrl: "https://query.wikidata.org/sparql",
-  charts: ["Graph (Network Diagram)", "Tree (Hierarchical Diagram)", "Table"],
+  charts: [
+    "Graph (Network Diagram)",
+    "Zoomable Treemap",
+    "Tree (Hierarchical Diagram)", 
+    "Table"
+  ],
   topics: ["Computer Science", "Mathematics", "Physics"],
   wikidataItems: {
     "Computer Science": "Q21198",

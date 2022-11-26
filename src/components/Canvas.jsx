@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import Graph from "./Graph";
 import Tree from "./Tree";
@@ -13,13 +13,37 @@ const Canvas = (props) => {
   const chartHandler = (chart) => {
     switch (chart) {
       case "Graph (Network Diagram)":
-        return <Graph items={items} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />;
+        return (
+          <Graph
+            items={items}
+            chosenTopic={chosenTopic}
+            chosenProperty={chosenProperty}
+          />
+        );
       case "Tree":
-        return <Tree items={items} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />;
+        return (
+          <Tree
+            items={items}
+            chosenTopic={chosenTopic}
+            chosenProperty={chosenProperty}
+          />
+        );
       case "Table":
-        return <Table items={items} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />;
+        return (
+          <Table
+            items={items}
+            chosenTopic={chosenTopic}
+            chosenProperty={chosenProperty}
+          />
+        );
       default:
-        return <Table items={items} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />;
+        return (
+          <Table
+            items={items}
+            chosenTopic={chosenTopic}
+            chosenProperty={chosenProperty}
+          />
+        );
     }
   };
 

@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import NavMenu from "./components/NavMenu";
 import QueryForm from "./components/QueryForm";
@@ -21,7 +21,12 @@ const App = () => {
     <div className="App">
       <NavMenu />
       <QueryForm onQuerySubmit={onQuerySubmit} />
-      <Canvas items={res} chart={chosenChart} chosenTopic={chosenTopic} chosenProperty={chosenProperty} />
+      <Canvas
+        items={res}
+        chart={chosenChart}
+        chosenTopic={chosenTopic}
+        chosenProperty={chosenProperty}
+      />
     </div>
   );
 };
