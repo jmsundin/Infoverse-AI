@@ -1,7 +1,8 @@
 const queryData = {
   endpointUrl: "https://query.wikidata.org/sparql",
   charts: [
-    "Graph (Network Diagram)",
+    "Graph (Vis-Network)",
+    "Graph (D3 Network)",
     "Zoomable Treemap",
     "Tree (Hierarchical Diagram)", 
     "Table"

@@ -1,5 +1,5 @@
 const Tree = (props) => {
-  const items = props.items;
+  const items = props.data;
 
   return (
     <div className="Tree">

@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import uuid from "react-uuid";
 import * as d3 from "d3";
 import { useState, useEffect, useRef } from "react";
 import transformData from "../Helper/transformData";
@@ -9,7 +9,11 @@ function ZoomableTreemap(props) {
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, height]);
 
-  const { nodes, links } = transformData(props.chosenTopic, props.items, props.chosenTopic);
+  // const { nodes, links } = transformData(props.chosenTopic, props.items, props.chosenTopic);
+  
+  const root = d3.hierarchy(data);
+  const nodes = root.descendants();
+  const links = root.links();
 
   const svg = d3.select(svgRef.current);
   svg = d3

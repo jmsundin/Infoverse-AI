@@ -1,19 +1,23 @@
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
-import { SPARQLQueryDispatcher } from "../SPARQLQuery/SPARQLQueryDispatcher";
-import "./Dropdown.css";
+import { useState, useRef } from "react";
+import { SPARQLQueryDispatcher } from "../utils/SPARQLQuery/SPARQLQueryDispatcher";
+import { transformDataForVisNetwork } from "../utils/Helper/transformData";
+import { transformDataForD3 } from "../utils/Helper/transformData";
 
-import queryData from "../SPARQLQuery/queryData";
+import queryData from "../utils/SPARQLQuery/queryData";
+import d3TreeDummyData from "../data/d3TreeDummyData";
+import visNetworkDummyData from "../data/visNetworkDummyData";
+
+import "../assets/Dropdown.css";
 
 const QueryForm = (props) => {
-  const [chosenChart, setChosenChart] = useState("Graph (Network Diagram)");
+  const [chosenChart, setChosenChart] = useState("Graph (Vis-Network)");
   const [chosenTopic, setChosenTopic] = useState("Computer Science");
   const [chosenProperty, setChosenProperty] = useState("Subclass of");
 
   const wikidataItems = queryData.wikidataItems;
   const wikidataProperties = queryData.wikidataProperties;
 
-  let query = `SELECT ?item ?itemLabel ?child1 ?child1Label ?child2 ?child2Label WHERE {
+  let query = `SELECT ?itemLabel ?child1Label ?child2Label WHERE {
     ?item wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
     ?child1 wdt:${wikidataProperties[chosenProperty]} ?item .
     ?child2 wdt:${wikidataProperties[chosenProperty]} ?child1 .
@@ -21,20 +25,16 @@ const QueryForm = (props) => {
   }
   LIMIT 100`;
 
-  // const onChangeHandler = (event) => {
-  //   event.preventDefault();
-  //   const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
-  //   queryDispatcher.query(query).then((res) => {
-  //     props.onQuerySubmit(res, chosenChart, chosenTopic, chosenProperty);
-  //   });
-  // };
-
   const onSubmitHandler = (event) => {
     event.preventDefault();
     const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
-    queryDispatcher.query(query).then((res) => {
-      props.onQuerySubmit(res, chosenChart, chosenTopic, chosenProperty);
+    queryDispatcher.query(query).then((resource) => {
+      props.onQuerySubmit(resource, chosenChart, chosenTopic, chosenProperty);
     });
+  };
+
+  const onClickTestHandler = (event) => {
+    props.onQuerySubmit(chosenChart, chosenTopic, chosenProperty);
   };
 
   const chartDropdownMenu = (
@@ -50,10 +50,7 @@ const QueryForm = (props) => {
             <button
               key={chart}
               name={chart}
-              onClick={(event) => {
-                setChosenChart(event.target.name);
-                // onChangeHandler(event);
-              }}
+              onClick={(event) => setChosenChart(event.target.name)}
             >
               {chart}
             </button>
@@ -76,10 +73,7 @@ const QueryForm = (props) => {
             <button
               key={topic}
               name={topic}
-              onClick={(event) => {
-                setChosenTopic(event.target.name);
-                // onChangeHandler(event);
-              }}
+              onClick={(event) => setChosenTopic(event.target.name)}
             >
               {topic}
             </button>
@@ -102,10 +96,7 @@ const QueryForm = (props) => {
             <button
               key={property}
               name={property}
-              onClick={(event) => {
-                setChosenProperty(event.target.name);
-                // onChangeHandler(event);
-              }}
+              onClick={(event) => setChosenProperty(event.target.name)}
             >
               {property}
             </button>
@@ -121,6 +112,12 @@ const QueryForm = (props) => {
     </button>
   );
 
+  const testButton = (
+    <button className="dropdownbtn" onClick={onClickTestHandler}>
+      Test
+    </button>
+  );
+
   return (
     <table>
       <tbody>
@@ -131,6 +128,10 @@ const QueryForm = (props) => {
           <td>
             <br></br>
             {exploreButton}
+          </td>
+          <td>
+            <br></br>
+            {testButton}
           </td>
         </tr>
       </tbody>
