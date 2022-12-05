@@ -3,15 +3,15 @@ import d3TreeDummyData from "../../data/d3TreeDummyData";
 
 export function transformDataForVisNetwork(data) {
   let bindings = data?.results?.bindings;
-
-  let visNetworkData = {};
-  let nodes = [];
-  let edges = [];
-
+  console.log("bindings: ", JSON.stringify(bindings));
+  let visNetworkData = {
+    nodes: [],
+    edges: []
+  };
   // console.log("Array.isArray(bindings): ",  Array.isArray(bindings));
   // console.log("bindings: ", JSON.stringify(bindings));
 
-  if (bindings !== null && bindings != undefined && bindings.length > 0) {
+  if (bindings !== undefined && bindings.length > 0) {
     bindings.forEach((binding) => {
       let parentNode = {};
       let parentEdge = {};
@@ -19,92 +19,110 @@ export function transformDataForVisNetwork(data) {
       let childEdge = {};
       let grandChildNode = {};
 
-      parentNode.id = binding.itemLabel.value;
-      parentNode.label = binding.itemLabel.value;
-      parentEdge.from = binding.itemLabel.value;
-      parentEdge.to = binding.child1Label.value;
+      parentNode.id = binding.parentLabel.value;
+      parentNode.label = binding.parentLabel.value;
+      parentEdge.from = binding.parentLabel.value;
+      parentEdge.to = binding.childLabel.value;
 
-      childNode.id = binding.child1Label.value;
-      childNode.label = binding.child1Label.value;
-      childEdge.from = binding.child1Label.value;
-      childEdge.to = binding.child2Label.value;
+      childNode.id = binding.childLabel.value;
+      childNode.label = binding.childLabel.value;
+      childEdge.from = binding.childLabel.value;
+      childEdge.to = binding.grandChildLabel.value;
 
-      grandChildNode.id = binding.child2Label.value;
-      grandChildNode.label = binding.child2Label.value;
+      grandChildNode.id = binding.grandChildLabel.value;
+      grandChildNode.label = binding.grandChildLabel.value;
 
       // push node to nodes array if another node with the same id does not exist already
       [parentNode, childNode, grandChildNode].forEach((node) => {
-        if (!nodes.some((n) => n.id === node.id)) {
-          nodes.push(node);
+        if (!visNetworkData.nodes.some((n) => n.id === node.id)) {
+          visNetworkData.nodes.push(node);
         }
       });
 
       // push edge to edges array if another edge with the same id does not exist already
       [parentEdge, childEdge].forEach((edge) => {
-        if (!edges.some((e) => e.from === edge.from && e.to === edge.to)) {
-          edges.push(edge);
+        if (!visNetworkData.edges.some((e) => e.from === edge.from && e.to === edge.to)) {
+          visNetworkData.edges.push(edge);
         }
       });
     });
-  } else {
-    return visNetworkDummyData;
   }
-  // console.log("visNetworkData: ", JSON.stringify(visNetworkData));
 
-  // console.log("nodes: ", JSON.stringify(nodes));
-  visNetworkData.nodes = nodes;
-  visNetworkData.edges = edges;
+  console.log("visNetworkData: ", JSON.stringify(visNetworkData));
 
   return visNetworkData;
 }
+
 
 export function transformDataForD3(data, chosenTopic) {
   let bindings = data?.results?.bindings;
 
   bindings = bindings ? bindings : d3TreeDummyData;
 
-  let rootNode = { name: chosenTopic, children: [] };
+  let root = { name: chosenTopic, children: [] };
   let parentNode = { name: "", children: [] };
   let childNode = { name: "", children: [] };
   let grandChildNode = { name: "", children: [] };
 
+  const children = []; // array of children of the root node
+  const nodes = {}; // Use a hash table to avoid duplicate nodes
+
+
+  // TODO: remove duplicate nodes
   bindings.forEach((binding) => {
-    parentNode.name = binding.itemLabel.value;
-    childNode.name = binding.child1Label.value;
-    grandChildNode.name = binding.child2Label.value;
+    let node = {
+      name: binding.itemLabel.value,
+      children: [
+        {
+          name: binding.child1Label.value,
+          children: [
+            {
+              name: binding.child2Label.value,
+              children: [],
+            },
+          ],
+        },
+      ],
+    };
 
-    rootNode.children.push(parentNode);
-    parentNode.children.push(childNode);
-    childNode.children.push(grandChildNode);
-
-    // TODO: remove duplicates
-    // check if the parent node already exists in the root node
-    // if not, add/push it
-    // const deduplicatesInRoot = (node) => {
-    //   if (!rootNode.children.some((childOfRoot) => childOfRoot.name === node.name)
-    //   ) {
-    //     rootNode.children.push(node);
-    //   }
-    // };
-    // deduplicatesInRoot(parentNode);
-
-
-    // check if the child node already exists in the parent node
-    // if not, add/push it
-    // [childNode, grandChildNode].forEach((node) => {
-    //   if (!parentNode.children.some((child) => child.name === node.name)) {
-    //     parentNode.children.push(node);
-    //   }
-    // });
-
-    // check if the grandchild node already exists in the child node
-    // if not, add/push it
-    // childNode.children.forEach((grandChild) => {
-    //   if (!childNode.children.some((n) => n.name === grandChildNode.name)) {
-    //     node.children.push(grandChildNode);
-    //   }
-    // });
+    // check if node already is in nodes object
+    if (nodes[node.name]) {
+      // if node is already in nodes object, add children to existing node
+      nodes[node.name].children.push(...node.children);
+    } else {
+      nodes[node.name] = node;
+    }
+    children.push(Object.values(nodes));
   });
 
-  return rootNode;
+  root.children.push(...children);
+  // console.log("root: ", JSON.stringify(root));
+
+  return root;
+
+  // root.children.push(parentNode);
+
+  // check if the parent node already exists in the root node
+  // if not, add/push it
+  //   const isChildOfRoot = (node) => node.name === parentNode.name;
+  //   const isChildOfParent = (node) => node.name === childNode.name;
+  //   const isChildOfChild = (node) => node.name === grandChildNode.name;
+
+  //   if (!root.children.some((node) => isChildOfRoot(node))) {
+  //     root.children.push(parentNode);
+  //   }
+
+  //   // check if the child node already exists in the parent node
+  //   // if not, add/push it
+  //   if (!parentNode.children.some((node) => isChildOfParent(node))) {
+  //     parentNode.children.push(childNode);
+  //   }
+
+  //   // check if the grandchild node already exists in the child node
+  //   // if not, add/push it
+  //   if (!childNode.children.some((node) => isChildOfChild(node))) {
+  //     childNode.children.push(grandChildNode);
+  //   }
+  // });
+
 }

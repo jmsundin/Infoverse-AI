@@ -9,6 +9,7 @@ import VisNetworkParams from "../utils/Helper/VisNetworkParams";
 import "vis-network/styles/vis-network.css";
 
 import { transformDataForVisNetwork } from "../utils/Helper/transformData";
+import visNetworkDummyData from "../data/visNetworkDummyData";
 
 const visNetworkOptions = VisNetworkParams?.options;
 const visNetworkEvents = VisNetworkParams?.events;
@@ -22,13 +23,18 @@ const VisNetworkGraph = ({
   getNodes,
   getEdges,
 }) => {
-  const visNetworkData = transformDataForVisNetwork(data);
+  if(data === null){
+    data = visNetworkDummyData;
+  }else{
+    data = transformDataForVisNetwork(data);
+  }
+
 //   console.log("visNetworkData: ", JSON.stringify(visNetworkData));
 
-  let nodes = useRef(new DataSet(visNetworkData.nodes));
-  let edges = useRef(new DataSet(visNetworkData.edges));
-  console.log("nodes: ", JSON.stringify(nodes.current.get()));
-  console.log("edges: ", JSON.stringify(edges.current.get()));
+  let nodes = useRef(new DataSet(data.nodes));
+  let edges = useRef(new DataSet(data.edges));
+  // console.log("nodes: ", JSON.stringify(nodes.current.get()));
+  // console.log("edges: ", JSON.stringify(edges.current.get()));
 
   const network = useRef(null);
   const container = useRef(null);
@@ -54,8 +60,8 @@ const VisNetworkGraph = ({
   }, []);
 
   useEffect(() => {
-    const nodesChange = !isEqual(nodes.current, visNetworkData.nodes);
-    const edgesChange = !isEqual(edges.current, visNetworkData.edges);
+    const nodesChange = !isEqual(nodes.current, data.nodes);
+    const edgesChange = !isEqual(edges.current, data.edges);
 
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;

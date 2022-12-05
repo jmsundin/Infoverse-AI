@@ -1,11 +1,6 @@
 import { useState, useRef } from "react";
 import { SPARQLQueryDispatcher } from "../utils/SPARQLQuery/SPARQLQueryDispatcher";
-import { transformDataForVisNetwork } from "../utils/Helper/transformData";
-import { transformDataForD3 } from "../utils/Helper/transformData";
-
 import queryData from "../utils/SPARQLQuery/queryData";
-import d3TreeDummyData from "../data/d3TreeDummyData";
-import visNetworkDummyData from "../data/visNetworkDummyData";
 
 import "../assets/Dropdown.css";
 
@@ -17,13 +12,13 @@ const QueryForm = (props) => {
   const wikidataItems = queryData.wikidataItems;
   const wikidataProperties = queryData.wikidataProperties;
 
-  let query = `SELECT ?itemLabel ?child1Label ?child2Label WHERE {
-    ?item wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
-    ?child1 wdt:${wikidataProperties[chosenProperty]} ?item .
-    ?child2 wdt:${wikidataProperties[chosenProperty]} ?child1 .
+  let query = `SELECT ?parent ?parentLabel ?child ?childLabel ?grandChild ?grandChildLabel WHERE {
+    ?parent wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
+    ?child wdt:${wikidataProperties[chosenProperty]} ?parent .
+    ?grandChild wdt:${wikidataProperties[chosenProperty]} ?child .
     SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
   }
-  LIMIT 100`;
+  LIMIT 50`;
 
   const onSubmitHandler = (event) => {
     event.preventDefault();

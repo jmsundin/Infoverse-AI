@@ -5,9 +5,8 @@ import { transformDataForD3 } from "../utils/Helper/transformData";
 
 // d3 force graph
 function Graph(props) {
-  // TODO: remove duplicates
-  // let data = transformDataForD3(props.data, props.chosenTopic);
-  let data = props.data;
+  let data = transformDataForD3(props.data, props.chosenTopic);
+  // let data = props.data;
 
   // console.log("data: ", JSON.stringify(data, chosenTopic));
 
@@ -15,6 +14,9 @@ function Graph(props) {
   const root = d3.hierarchy(data);
   const nodes = root.descendants();
   const links = root.links();
+
+  // console.log("root: ", root);
+  // console.log("nodes: ", nodes);
 
   const dimensions = {
     width: window.innerWidth * 0.9,

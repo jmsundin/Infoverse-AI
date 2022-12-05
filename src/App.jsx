@@ -3,10 +3,8 @@ import NavMenu from "./components/NavMenu";
 import QueryForm from "./components/QueryForm";
 import Canvas from "./components/Canvas";
 
-import visNetworkDummyData from "./data/visNetworkDummyData";
-
 const App = () => {
-  const [data, setData] = useState(visNetworkDummyData);
+  const [data, setData] = useState(null);
   const [chosenChart, setChosenChart] = useState("Graph (Vis-Network)");
   const [chosenTopic, setChosenTopic] = useState("Computer Science");
   const [chosenProperty, setChosenProperty] = useState("Subclass of");
