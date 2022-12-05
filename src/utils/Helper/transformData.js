@@ -6,7 +6,7 @@ export function transformDataForVisNetwork(data) {
   console.log("bindings: ", JSON.stringify(bindings));
   let visNetworkData = {
     nodes: [],
-    edges: []
+    edges: [],
   };
   // console.log("Array.isArray(bindings): ",  Array.isArray(bindings));
   // console.log("bindings: ", JSON.stringify(bindings));
@@ -41,7 +41,11 @@ export function transformDataForVisNetwork(data) {
 
       // push edge to edges array if another edge with the same id does not exist already
       [parentEdge, childEdge].forEach((edge) => {
-        if (!visNetworkData.edges.some((e) => e.from === edge.from && e.to === edge.to)) {
+        if (
+          !visNetworkData.edges.some(
+            (e) => e.from === edge.from && e.to === edge.to
+          )
+        ) {
           visNetworkData.edges.push(edge);
         }
       });
@@ -53,50 +57,58 @@ export function transformDataForVisNetwork(data) {
   return visNetworkData;
 }
 
-
 export function transformDataForD3(data, chosenTopic) {
   let bindings = data?.results?.bindings;
 
   bindings = bindings ? bindings : d3TreeDummyData;
 
-  let root = { name: chosenTopic, children: [] };
-  let parentNode = { name: "", children: [] };
-  let childNode = { name: "", children: [] };
-  let grandChildNode = { name: "", children: [] };
+  let rootNode = { name: chosenTopic, children: [] };
 
-  const children = []; // array of children of the root node
-  const nodes = {}; // Use a hash table to avoid duplicate nodes
-
-
-  // TODO: remove duplicate nodes
   bindings.forEach((binding) => {
-    let node = {
-      name: binding.itemLabel.value,
-      children: [
-        {
-          name: binding.child1Label.value,
-          children: [
-            {
-              name: binding.child2Label.value,
-              children: [],
-            },
-          ],
-        },
-      ],
+    let childNode = { 
+      name: binding.childLabel.value, 
+      children: [] 
+    };
+    let grandChildNode = { 
+      name: binding.grandChildLabel.value, 
+      children: [] 
+    };
+    let greatGrandChildNode = {
+      name: binding.greatGrandChildLabel.value,
+      children: [],
     };
 
-    // check if node already is in nodes object
-    if (nodes[node.name]) {
-      // if node is already in nodes object, add children to existing node
-      nodes[node.name].children.push(...node.children);
-    } else {
-      nodes[node.name] = node;
+    // if the root node does not have a child with the same name already, add child node to root node children array
+    if (!rootNode.children.some((child) => child.name === childNode.name)) {
+      // child node does not exist yet, add it to the root node children array
+      rootNode.children.push(childNode);
     }
-    children.push(Object.values(nodes));
+    // child node already exists in root node children array
+    else {
+      childNode = rootNode.children.find((child) => child.name === childNode.name);
+      // check if the child node has a grandchild with the same name already
+      if (!childNode.children.some((grandChild) => grandChild.name === grandChildNode.name)) {
+        // grandchild does not exist yet, add it to the child node children array
+        childNode.children.push(grandChildNode);
+      }
+      // grandchild node already exists in child node children array
+      else {
+        grandChildNode = childNode.children.find((grandChild) => grandChild.name === grandChildNode.name);
+        // check if the grandchild node has a greatgrandchild with the same name already
+        if (!grandChildNode.children.some((greatGrandChild) => greatGrandChild.name === greatGrandChildNode.name)) {
+          // greatgrandchild does not exist yet, add it to the grandchild node children array
+          grandChildNode.children.push(greatGrandChildNode);
+        }
+        else {
+          // greatgrandchild node already exists in grandchild node children array
+          // do nothing
+        }
+      }
+    }
+
   });
 
-  root.children.push(...children);
-  // console.log("root: ", JSON.stringify(root));
+  console.log("root: ", JSON.stringify(rootNode));
 
   return root;
 
@@ -124,5 +136,4 @@ export function transformDataForD3(data, chosenTopic) {
   //     childNode.children.push(grandChildNode);
   //   }
   // });
-
 }
