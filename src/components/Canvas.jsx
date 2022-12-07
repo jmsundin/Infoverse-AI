@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
-import Graph from "./Graph";
-import Tree from "./Tree";
-import Table from "./Table";
 import VisNetworkGraph from "./VisNetworkGraph";
+import D3Graph from "./D3Graph";
+import D3ReactTree from "./D3ReactTree";
+import Table from "./Table";
+
 import VisNetworkParams from "../utils/Helper/VisNetworkParams";
 
 const Canvas = (props) => {
@@ -31,7 +32,7 @@ const Canvas = (props) => {
         );
       case "Graph (D3 Network)":
         return (
-          <Graph
+          <D3Graph
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
@@ -39,7 +40,7 @@ const Canvas = (props) => {
         );
       case "Tree":
         return (
-          <Tree
+          <D3ReactTree
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
@@ -51,15 +52,6 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-          />
-        );
-      default:
-        return (
-          <VisNetworkGraph
-            data={data}
-            options={VisNetworkParams.options}
-            events={VisNetworkParams.events}
-            getNodes={getNodes}
           />
         );
     }
