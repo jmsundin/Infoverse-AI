@@ -12,10 +12,10 @@ const QueryForm = (props) => {
   const wikidataItems = queryData.wikidataItems;
   const wikidataProperties = queryData.wikidataProperties;
 
-  let query = `SELECT ?parent ?parentLabel ?child ?childLabel ?grandChild ?grandChildLabel WHERE {
-    ?parent wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
-    ?child wdt:${wikidataProperties[chosenProperty]} ?parent .
+  let query = `SELECT ?child ?childLabel ?grandChild ?grandChildLabel ?greatGrandChild ?greatGrandChildLabel WHERE {
+    ?child wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
     ?grandChild wdt:${wikidataProperties[chosenProperty]} ?child .
+    ?greatGrandChild wdt:${wikidataProperties[chosenProperty]} ?grandChild .
     SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
   }
   LIMIT 50`;

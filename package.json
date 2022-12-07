@@ -189,6 +189,7 @@
     "quick-lru": "^5.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
+    "react-d3-tree": "^3.3.6",
     "react-dom": "^18.2.0",
     "react-error-overlay": "^6.0.9",
     "react-is": "^16.13.1",
@@ -217,6 +218,7 @@
     "stable": "^0.1.8",
     "strip-ansi": "^6.0.1",
     "strip-json-comments": "^3.1.1",
+    "styled-components": "^5.3.6",
     "supports-color": "^7.2.0",
     "supports-preserve-symlinks-flag": "^1.0.0",
     "svgo": "^2.8.0",
@@ -262,5 +264,8 @@
   "bugs": {
     "url": "https://github.com/jmsundin/Visualize-Wikidata/issues"
   },
-  "homepage": "https://github.com/jmsundin/Visualize-Wikidata#readme"
+  "homepage": "https://github.com/jmsundin/Visualize-Wikidata#readme",
+  "devDependencies": {
+    "buffer": "^5.7.1"
+  }
 }

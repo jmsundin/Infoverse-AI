@@ -4,7 +4,7 @@ const queryData = {
     "Graph (Vis-Network)",
     "Graph (D3 Network)",
     "Zoomable Treemap",
-    "Tree (Hierarchical Diagram)", 
+    "Tree",
     "Table"
   ],
   topics: ["Computer Science", "Mathematics", "Physics"],

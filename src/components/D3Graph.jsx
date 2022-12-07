@@ -1,11 +1,11 @@
 import uuid from "react-uuid";
 import { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { transformDataForD3 } from "../utils/Helper/transformData";
+import { transformDataForD3Graph } from "../utils/Helper/transformData";
 
 // d3 force graph
-function Graph(props) {
-  let data = transformDataForD3(props.data, props.chosenTopic);
+function D3Graph(props) {
+  let data = transformDataForD3Graph(props.data, props.chosenTopic);
   // let data = props.data;
 
   // console.log("data: ", JSON.stringify(data, chosenTopic));
@@ -71,17 +71,10 @@ function Graph(props) {
       .call(drag(simulation));
 
     // TODO: add labels to nodes
-    // const text = svg
-    //   .append("g")
-    //   .attr("fill", "#000")
-    //   .attr("font-family", "sans-serif")
-    //   .attr("font-size", 10)
-    //   .selectAll("text")
-    //   .data(nodes)
-    //   .join("text")
-    //   .attr("x", 8)
-    //   .attr("y", "0.31em")
-    //   .text((d) => d.data.name);
+    node.append("text")
+      .attr("dx", 12)
+      .attr("dy", "0.35em")
+      .text((d) => d.data.name);
 
     function drag(simulation) {
       function dragstarted(event, d) {
@@ -126,4 +119,4 @@ function Graph(props) {
   return <svg ref={svgRef} width={svgWidth} height={svgHeight}></svg>;
 }
 
-export default Graph;
+export default D3Graph;
