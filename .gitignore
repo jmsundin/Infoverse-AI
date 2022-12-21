@@ -1,3 +1,6 @@
+# Ignore Project Report Directory
+Project\ Report
+
 # Ignore React specific files
 .DS_STORE
 node_modules

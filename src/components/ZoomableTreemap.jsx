@@ -1,134 +1,122 @@
-import uuid from "react-uuid";
+import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { useState, useEffect, useRef } from "react";
-import transformData from "../Helper/transformData";
+import { transformDataForD3ReactTree } from "../utils/Helper/transformData";
+import d3TreeDummyDataFlare from "../data/d3TreeDummyDataFlare-2";
+import { svg } from "d3";
 
 function ZoomableTreemap(props) {
-  const svgRef = useRef(null); // reference to svg element
+  let data = d3TreeDummyDataFlare;
+  const width = props.width;
+  const height = props.height;
 
-  const x = d3.scaleLinear().rangeRound([0, width]);
-  const y = d3.scaleLinear().rangeRound([0, height]);
+  let format = d3.format(",d");
+  const svgRef = useRef(null);
 
-  // const { nodes, links } = transformData(props.chosenTopic, props.items, props.chosenTopic);
-  
-  const root = d3.hierarchy(data);
-  const nodes = root.descendants();
-  const links = root.links();
-
-  const svg = d3.select(svgRef.current);
-  svg = d3
-    .select("svg")
-    .append("svg")
-    .attr("viewBox", [0.5, -30.5, width, height + 30])
-    .style("font", "10px sans-serif");
-
-  let group = svg.append("g").call(render, treemap(data));
-
-  function render(group, root) {
-    const node = group
-      .selectAll("g")
-      .data(root.children.concat(root))
-      .join("g");
-
-    node
-      .filter((d) => (d === root ? d.parent : d.children))
-      .attr("cursor", "pointer")
-      .on("click", (event, d) => (d === root ? zoomout(root) : zoomin(d)));
-
-    node.append("title").text((d) => `${name(d)}\n${format(d.value)}`);
-
-    node
-      .append("rect")
-      .attr("id", (d) => (d.leafUid = DOM.uid("leaf")).id)
-      .attr("fill", (d) => (d === root ? "#fff" : d.children ? "#ccc" : "#ddd"))
-      .attr("stroke", "#fff");
-
-    node
-      .append("clipPath")
-      .attr("id", (d) => (d.clipUid = DOM.uid("clip")).id)
-      .append("use")
-      .attr("xlink:href", (d) => d.leafUid.href);
-
-    node
-      .append("text")
-      .attr("clip-path", (d) => d.clipUid)
-      .attr("font-weight", (d) => (d === root ? "bold" : null))
-      .selectAll("tspan")
-      .data((d) =>
-        (d === root ? name(d) : d.data.name)
-          .split(/(?=[A-Z][^A-Z])/g)
-          .concat(format(d.value))
-      )
-      .join("tspan")
-      .attr("x", 3)
-      .attr(
-        "y",
-        (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`
-      )
-      .attr("fill-opacity", (d, i, nodes) =>
-        i === nodes.length - 1 ? 0.7 : null
-      )
-      .attr("font-weight", (d, i, nodes) =>
-        i === nodes.length - 1 ? "normal" : null
-      )
-      .text((d) => d);
-
-    group.call(position, root);
-  }
-
-  function position(group, root) {
-    group
-      .selectAll("g")
-      .attr("transform", (d) =>
-        d === root ? `translate(0,-30)` : `translate(${x(d.x0)},${y(d.y0)})`
-      )
-      .select("rect")
-      .attr("width", (d) => (d === root ? width : x(d.x1) - x(d.x0)))
-      .attr("height", (d) => (d === root ? 30 : y(d.y1) - y(d.y0)));
-  }
-
-  // When zooming in, draw the new nodes on top, and fade them in.
-  function zoomin(d) {
-    const group0 = group.attr("pointer-events", "none");
-    const group1 = (group = svg.append("g").call(render, d));
-
-    x.domain([d.x0, d.x1]);
-    y.domain([d.y0, d.y1]);
-
-    svg
-      .transition()
-      .duration(750)
-      .call((t) => group0.transition(t).remove().call(position, d.parent))
-      .call((t) =>
-        group1
-          .transition(t)
-          .attrTween("opacity", () => d3.interpolate(0, 1))
-          .call(position, d)
+  useEffect(() => {
+    const partition = (data) => {
+      const root = d3
+        .hierarchy(data)
+        .sum((d) => d.value)
+        .sort((a, b) => b.height - a.height || b.value - a.value);
+      return d3.partition().size([height, ((root.height + 1) * width) / 3])(
+        root
       );
-  }
+    };
 
-  // When zooming out, draw the old nodes on top, and fade them out.
-  function zoomout(d) {
-    const group0 = group.attr("pointer-events", "none");
-    const group1 = (group = svg.insert("g", "*").call(render, d.parent));
+    const root = partition(d3TreeDummyDataFlare);
+    let focus = root;
+    let color = d3.scaleOrdinal(
+      d3.quantize(d3.interpolateRainbow, data.children.length + 1)
+    );
 
-    x.domain([d.parent.x0, d.parent.x1]);
-    y.domain([d.parent.y0, d.parent.y1]);
+    svgRef.current = d3
+      .create("svg")
+      .attr("viewBox", [0, 0, width, height])
+      .style("font", "10px sans-serif");
 
-    svg
-      .transition()
-      .duration(750)
-      .call((t) =>
-        group0
-          .transition(t)
-          .remove()
-          .attrTween("opacity", () => d3.interpolate(1, 0))
-          .call(position, d)
-      )
-      .call((t) => group1.transition(t).call(position, d.parent));
-  }
+    const svg = svgRef.current;
 
-  return <svg ref={svgRef}></svg>;
+    const cell = svg
+      .selectAll("g")
+      .data(root.descendants())
+      .join("g")
+      .attr("transform", (d) => `translate(${d.y0},${d.x0})`);
+
+    const rect = cell
+      .append("rect")
+      .attr("width", (d) => d.y1 - d.y0 - 1)
+      .attr("height", (d) => rectHeight(d))
+      .attr("fill-opacity", 0.6)
+      .attr("fill", (d) => {
+        if (!d.depth) return "#ccc";
+        while (d.depth > 1) d = d.parent;
+        return color(d.data.name);
+      })
+      .style("cursor", "pointer")
+      .on("click", clicked);
+
+    const text = cell
+      .append("text")
+      .style("user-select", "none")
+      .attr("pointer-events", "none")
+      .attr("x", 4)
+      .attr("y", 13)
+      .attr("fill-opacity", (d) => +labelVisible(d));
+
+    text.append("tspan").text((d) => d.data.name);
+
+    const tspan = text
+      .append("tspan")
+      .attr("fill-opacity", (d) => labelVisible(d) * 0.7)
+      .text((d) => ` ${format(d.value)}`);
+
+    cell.append("title").text(
+      (d) =>
+        `${d
+          .ancestors()
+          .map((d) => d.data.name)
+          .reverse()
+          .join("/")}\n${format(d.value)}`
+    );
+
+    function clicked(event, p) {
+      focus = focus === p ? (p = p.parent) : p;
+
+      root.each(
+        (d) =>
+          (d.target = {
+            x0: ((d.x0 - p.x0) / (p.x1 - p.x0)) * height,
+            x1: ((d.x1 - p.x0) / (p.x1 - p.x0)) * height,
+            y0: d.y0 - p.y0,
+            y1: d.y1 - p.y0,
+          })
+      );
+
+      const t = cell
+        .transition()
+        .duration(750)
+        .attr("transform", (d) => `translate(${d.target.y0},${d.target.x0})`);
+
+      rect.transition(t).attr("height", (d) => rectHeight(d.target));
+      text.transition(t).attr("fill-opacity", (d) => +labelVisible(d.target));
+      tspan
+        .transition(t)
+        .attr("fill-opacity", (d) => labelVisible(d.target) * 0.7);
+    }
+
+    function rectHeight(d) {
+      return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
+    }
+
+    function labelVisible(d) {
+      return d.y1 <= width && d.y0 >= 0 && d.x1 - d.x0 > 16;
+    }
+  }, [data]);
+
+  return (
+    <svg ref={svgRef} width={width} height={height}>
+    </svg>
+  );
 }
 
 export default ZoomableTreemap;

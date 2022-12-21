@@ -1,16 +1,21 @@
 import { useState, useRef } from "react";
+import Select from 'react-select';
 import { SPARQLQueryDispatcher } from "../utils/SPARQLQuery/SPARQLQueryDispatcher";
 import queryData from "../utils/SPARQLQuery/queryData";
 
 import "../assets/Dropdown.css";
 
 const QueryForm = (props) => {
-  const [chosenChart, setChosenChart] = useState("Graph (Vis-Network)");
+  const [chosenChart, setChosenChart] = useState("Network Diagram");
   const [chosenTopic, setChosenTopic] = useState("Computer Science");
   const [chosenProperty, setChosenProperty] = useState("Subclass of");
 
   const wikidataItems = queryData.wikidataItems;
   const wikidataProperties = queryData.wikidataProperties;
+
+  const topicSelectOptions = queryData.topics.map((topic) => {
+    return { value: topic, label: topic };
+    });
 
   let query = `SELECT ?child ?childLabel ?grandChild ?grandChildLabel ?greatGrandChild ?greatGrandChildLabel WHERE {
     ?child wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[chosenTopic]} .
@@ -18,7 +23,7 @@ const QueryForm = (props) => {
     ?greatGrandChild wdt:${wikidataProperties[chosenProperty]} ?grandChild .
     SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
   }
-  LIMIT 50`;
+  LIMIT 1000`;
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
@@ -55,8 +60,10 @@ const QueryForm = (props) => {
     </>
   );
 
-  const topicDropdownMenu = (
+  // TODO: add searchable Select component
+  const topicSelectMenu = (
     <>
+    {/* <Select options={topicSelectOptions} /> */}
       <label htmlFor="dropdown-div">Select a Topic to Explore</label>
       <br></br>
       <div id="drowdown-div" className="dropdown">
@@ -114,19 +121,15 @@ const QueryForm = (props) => {
   );
 
   return (
-    <table>
+    <table style={ { margin: "auto" }}>
       <tbody>
         <tr>
           <td>{chartDropdownMenu}</td>
-          <td>{topicDropdownMenu}</td>
+          <td>{topicSelectMenu}</td>
           <td>{propertyDropdownMenu}</td>
           <td>
             <br></br>
             {exploreButton}
-          </td>
-          <td>
-            <br></br>
-            {testButton}
           </td>
         </tr>
       </tbody>

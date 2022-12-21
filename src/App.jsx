@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import NavMenu from "./components/NavMenu";
 import QueryForm from "./components/QueryForm";
 import Canvas from "./components/Canvas";
+import "./assets/App.css";
 
 const App = () => {
   const [data, setData] = useState(null);

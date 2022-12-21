@@ -5,20 +5,17 @@ import { DataSet } from "vis-data/peer/esm/vis-data";
 import { Network } from "vis-network/peer/esm/vis-network";
 import PropTypes from "prop-types";
 
-import VisNetworkParams from "../utils/Helper/VisNetworkParams";
 import "vis-network/styles/vis-network.css";
 
 import { transformDataForVisNetwork } from "../utils/Helper/transformData";
 import visNetworkDummyData from "../data/visNetworkDummyData";
 
-const visNetworkOptions = VisNetworkParams?.options;
-const visNetworkEvents = VisNetworkParams?.events;
 
 const VisNetworkGraph = ({
   data,
-  options = visNetworkOptions,
-  events = visNetworkEvents,
-  style = { width: "1280px", height: "600px" },
+  options,
+  events,
+  style = {},
   getNetwork,
   getNodes,
   getEdges,
@@ -29,7 +26,13 @@ const VisNetworkGraph = ({
     data = transformDataForVisNetwork(data);
   }
 
-//   console.log("visNetworkData: ", JSON.stringify(visNetworkData));
+  style = { width: window.innerWidth,
+            height: window.innerHeight,
+            paddingTop: 10,
+            paddingRight: 10,
+            paddingBottom: 10,
+            paddingLeft: 10,
+          };
 
   let nodes = useRef(new DataSet(data.nodes));
   let edges = useRef(new DataSet(data.edges));

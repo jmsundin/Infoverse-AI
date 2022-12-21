@@ -9,9 +9,6 @@ const NavMenu = () => {
         <Container>
           <Navbar.Brand href="#home">Visualize Wikidata</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#features">About</Nav.Link>
-            <Nav.Link href="#signup">Sign-Up</Nav.Link>
-            <Nav.Link href="#signin">Sign-In</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

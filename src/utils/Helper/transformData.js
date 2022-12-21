@@ -165,3 +165,8 @@ export function transformDataForD3ReactTree(data, chosenTopic) {
   return rootNode;
 
 }
+
+export function transformDataForD3Treemap(data, chosenTopic) {
+  
+
+}
