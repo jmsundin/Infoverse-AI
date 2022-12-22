@@ -1,6 +1,6 @@
 
 
-export default d3TreeDummyDataFlare = {
+const d3TreeDummyDataFlare = {
  "name": "flare",
  "children": [
   {
@@ -379,4 +379,6 @@ export default d3TreeDummyDataFlare = {
    ]
   }
  ]
-}
+};
+
+export default d3TreeDummyDataFlare;

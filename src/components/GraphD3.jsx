@@ -58,11 +58,10 @@ const GraphD3 = (props) => {
       .attr("r", 5)
       .attr("fill", "steelblue")
       .call(
-        d3
-          .drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended)
+        d3.drag()
+          .on("start", dragStarted)
+          .on("drag", dragging)
+          .on("end", dragEnded)
       );
 
     // Add tick event listener to the simulation to update the node and link positions
@@ -76,19 +75,19 @@ const GraphD3 = (props) => {
       node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
     });
 
-    function dragstarted(d) {
-      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    function dragStarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
 
-    function dragged(d) {
-      d.fx = d3.event.x;
-      d.fy = d3.event.y;
+    function dragging(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
     }
 
-    function dragended(d) {
-      if (!d3.event.active) simulation.alphaTarget(0);
+    function dragEnded(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
     }

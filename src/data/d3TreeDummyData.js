@@ -1,4 +1,4 @@
-export default treeDummyData = {
+const treeDummyData = {
   children: [
     {
       name: "boss1",
@@ -35,3 +35,5 @@ export default treeDummyData = {
   ],
   name: "CEO",
 };
+
+export default treeDummyData;

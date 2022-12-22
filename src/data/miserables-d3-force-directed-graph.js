@@ -1,4 +1,4 @@
-export default miserablesDummyData = {
+const miserablesDummyData = {
   "nodes": [
     {"id": "Myriel", "group": 1},
     {"id": "Napoleon", "group": 1},
@@ -334,4 +334,6 @@ export default miserablesDummyData = {
     {"source": "Mme.Hucheloup", "target": "Gavroche", "value": 1},
     {"source": "Mme.Hucheloup", "target": "Enjolras", "value": 1}
   ]
-}
+};
+
+export default miserablesDummyData;

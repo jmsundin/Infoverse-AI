@@ -1,4 +1,4 @@
-export default visNetworkDummyData = {
+const visNetworkDummyData = {
   nodes: [
     { id: "Topics to Explore", label: "Topics to Explore" },
     { id: "Computer Science", label: "Computer Science" },
@@ -27,7 +27,6 @@ export default visNetworkDummyData = {
     { id: "Astronomy", label: "Astronomy" },
     { id: "Geology", label: "Geology" },
   ],
-
   edges: [
     { from: "Topics to Explore", to: "Computer Science" },
     { from: "Topics to Explore", to: "Mathematics" },
@@ -56,3 +55,5 @@ export default visNetworkDummyData = {
     { from: "Topics to Explore", to: "Geology" }
   ],
 };
+
+export default visNetworkDummyData;
