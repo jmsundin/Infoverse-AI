@@ -26,12 +26,8 @@ const VisNetworkGraph = ({
     data = transformDataForVisNetwork(data);
   }
 
-  style = { width: window.innerWidth,
-            height: window.innerHeight,
-            paddingTop: 10,
-            paddingRight: 10,
-            paddingBottom: 10,
-            paddingLeft: 10,
+  style = { width: "100%",
+            height: "100%",
           };
 
   let nodes = useRef(new DataSet(data.nodes));
