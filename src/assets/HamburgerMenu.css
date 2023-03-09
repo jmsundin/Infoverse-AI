@@ -1,0 +1,31 @@
+.hamburger-menu {
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.bar {
+  width: 1.5rem;
+  height: 0.15rem;
+  background-color: white;
+  margin: 0.4rem 0;
+  transition: 0.4s;
+}
+
+.active .bar:first-child {
+  transform: translate(0.9rem) rotate(-45deg);
+}
+
+.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.active .bar:last-child {
+  transform: translate(-0.9rem) rotate(45deg);
+}
+
+@media (min-width: 500px) {
+  .hamburger-menu-container {
+    display: none;
+  }
+}
