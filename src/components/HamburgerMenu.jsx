@@ -1,34 +1,38 @@
 import React, { useState } from "react";
 import "../assets/HamburgerMenu.css";
 
-const HamburgerMenu = () => {
-  const [bars, setBars] = useState([
-    { id: 1, isActive: false },
-    { id: 2, isActive: false },
-    { id: 3, isActive: false },
-  ]);
+const HamburgerMenu = (props) => {
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const routes = props.routes;
 
-  const handleMenuClick = (id) => {
-    setBars((prevState) => {
-      prevState.map((bar) => {
-        bar.id === id ? { ...bar, isActive: !bar.isActive } : bar;
-      });
+  const menuClickHandler = () => {
+    setMenuIsOpen((prevState) => {
+      return !prevState;
     });
   };
 
-  const menu = (
-    <div className="hamburger-menu">
-      {bars.map((bar) => (
-        <div
-          key={bar.id}
-          className={bar.isActive ? "bar active" : "bar"}
-          onClick={() => handleMenuClick(bar.id)}
-        ></div>
-      ))}
-    </div>
-  );
+  const menuStyles = menuIsOpen ? "hamburger-menu open" : "hamburger-menu";
+  const menuItems = routes.map((route) => {
+    return (
+      <li key={route.page}>
+        <a href={route.path} alt={route.page}>
+          {route.page.charAt(0).toUpperCase() + route.page.slice(1)}
+        </a>
+      </li>
+    );
+  });
 
-  return menu;
+  return (
+    <React.Fragment>
+      <div className={menuStyles} onClick={menuClickHandler}>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </div>
+      {menuIsOpen && <ul className="menu-list-items">{menuItems}</ul>}
+    </React.Fragment>
+  );
 };
 
 export default HamburgerMenu;
