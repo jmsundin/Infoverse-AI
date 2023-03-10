@@ -1,7 +1,7 @@
 {
-  "name": "visualize-wikidata",
-  "version": "1.0.0",
-  "description": "Visualize Wikidata with D3",
+  "name": "infoverse-ai",
+  "version": "1.0.1",
+  "description": "Visualize information",
   "author": "Jon Sundin",
   "source": "./public/index.html",
   "dependencies": {
