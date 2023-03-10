@@ -1,0 +1,23 @@
+.about-section {
+    background: #f8f8f8;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.how-to-section {
+    background: #fff;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.technologies-section {
+    background: #f8f8f8;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

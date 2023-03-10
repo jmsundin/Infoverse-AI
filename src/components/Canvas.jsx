@@ -5,8 +5,9 @@ import TreeD3 from "./TreeD3";
 import ZoomableTreemap from "./ZoomableTreemap";
 import SunburstD3 from "./SunburstD3";
 import Table from "./Table";
-
 import VisNetworkParams from "../utils/Helper/VisNetworkParams";
+
+import "../assets/Canvas.css";
 
 const Canvas = (props) => {
   const data = props.data;
@@ -30,8 +31,8 @@ const Canvas = (props) => {
             options={VisNetworkParams.options}
             events={VisNetworkParams.events}
             getNodes={getNodes}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
       case "Graph (D3 Network)":
@@ -40,8 +41,8 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
       case "Tree Chart":
@@ -50,8 +51,8 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
       case "Zoomable Treemap":
@@ -60,8 +61,8 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
       case "Sunburst (D3)":
@@ -70,8 +71,8 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
       case "Table":
@@ -80,14 +81,14 @@ const Canvas = (props) => {
             data={data}
             chosenTopic={chosenTopic}
             chosenProperty={chosenProperty}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width="100%"
+            height="100%"
           />
         );
     }
   };
 
-  return <div className="Canvas">{chartHandler(chart)}</div>;
+  return <div className="canvas">{chartHandler(chart)}</div>;
 };
 
 export default Canvas;
