@@ -1,8 +1,8 @@
-# Visualize Wikidata
+# Infoverse AI
 
 ## Description
 
-This project provides a variety of visual interfaces to interact with the vast knowledge base of Wikidata. In addition to utilizing the linear form of information presentation that is common on Wikidata, this project provides many non-linear visual aids to present and interact with the information on Wikidata such as:
+This project provides visual interfaces to interact with the vast knowledge base of Wikidata. In addition to utilizing the linear form of information presentation that is common on Wikidata, this project provides many non-linear visual aids to present and interact with the information on Wikidata such as:
 
 - A graph visualization of the Wikidata knowledge base.
 - A map visualization of the Wikidata knowledge base.
@@ -26,11 +26,13 @@ Wikidata is a vast bank of structured information that is free and open to any u
 
 ## Technologies
 
-- D3 -> https://d3js.org/
 - React -> https://reactjs.org/
+- D3 -> https://d3js.org/
+- Visx -> https://airbnb.io/visx/
+- VisNetwork -> https://visjs.github.io/vis-network/
 - Parcel -> https://parceljs.org/
 - Wikidata SPARQL endpoint -> https://query.wikidata.org/
 - JavaScript -> https://www.javascript.com/
 - HTML -> https://www.w3schools.com/html/
 - CSS -> https://www.w3schools.com/css/
-  - Bootstrap -> https://getbootstrap.com/
+- Yarn -> https://yarnpkg.com/
