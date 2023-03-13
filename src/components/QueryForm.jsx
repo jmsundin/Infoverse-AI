@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 
-import { SPARQLQueryDispatcher } from "../utils/SPARQLQuery/SPARQLQueryDispatcher";
-import queryData from "../utils/SPARQLQuery/queryData";
+import axios from "axios";
+import Network from "../utils/Networking/Network";
+import { SPARQLQueryDispatcher } from "../utils/Networking/SPARQLQueryDispatcher";
+import queryData from "../utils/Networking/queryData";
 
 import "../assets/QueryForm.css";
 
 const QueryForm = (props) => {
+  const [searchBoxIsFocused, setSearchBoxIsFocused] = useState(false);
   const [chosenChart, setChosenChart] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [defaultOptionValue, setDefaultOptionValue] = useState("");
+  const [searchOptions, setSearchOptions] = useState(null);
   const [chosenProperty, setChosenProperty] = useState("Subclass of");
-
-  // let wikidataSearchURL =
-  //   "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item&language=en&search=" +
-  //   inputValue;
 
   const wikidataItems = queryData.wikidataItems;
   const wikidataProperties = queryData.wikidataProperties;
@@ -27,60 +27,22 @@ const QueryForm = (props) => {
   }
   LIMIT 1000`;
 
-  function onSubmitHandler(event){
-    event.preventDefault();
-    if (chosenChart.length !== 0 && inputValue.length !== 0) {
-      const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
-      queryDispatcher.query(query).then((resource) => {
-        props.onQuerySubmit(resource, chosenChart, inputValue, chosenProperty);
-      });
-    } else {
-      // alert("Please select a chart and a topic");
-    }
-  };
+  function handleSearchBoxOnFocus() {
+    setSearchBoxIsFocused((prevState) => !prevState);
+  }
 
-  // send user input on each key stroke (anytime the inputValue changes)
-  useEffect(() => {
-    fetch(
-      `https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&language=en&type=item&limit=10&search=${inputValue}`
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((searchResults) => {
-        console.log("Search Results:", searchResults);
-        setSuggestions(
-          searchResults.search.map((item) => ({
-            label: item.label,
-            id: item.id,
-          }))
-        );
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  }, [inputValue]);
+  function handleSearchBoxOnBlur() {
+    setSearchBoxIsFocused((prevState) => !prevState);
+  }
 
   function handleInputChange(event) {
     setInputValue(event.target.value);
-  };
+  }
 
-  function handleSelect(item){
-    setInputValue(item.id);
-  };
-
-  const datalistOptions = queryData.topics.map((topic) => {
-    return <option key={topic} name={topic} value={topic} />;
-  });
-
-  const suggestionOptions = suggestions.map((item) => (
-    <option key={item.id} onClick={() => handleSelect(item)}>
-      {item.label}
-    </option>
-  ));
+  function itemSelectedHandler(event) {
+    setInputValue(event.target.textContent);
+    setDefaultOptionValue(event.target.textContent);
+  }
 
   const chartDropdownMenu = (
     <div className="chart-menu">
@@ -89,10 +51,7 @@ const QueryForm = (props) => {
       </button>
       <ul className="chart-menu__dropdown">
         {queryData.charts.map((chart) => (
-          <li
-            key={chart}
-            onClick={() => setChosenChart(chart)}
-          >
+          <li key={chart} onClick={() => setChosenChart(chart)}>
             {chart}
           </li>
         ))}
@@ -100,20 +59,59 @@ const QueryForm = (props) => {
     </div>
   );
 
-  const search = (
-    <div className="topic-search">
+  const defaultOptionsList = queryData.topics.map((topic) => {
+    return (
+      <li
+        key={wikidataItems[topic]}
+        name={topic}
+        value={topic}
+        onClick={itemSelectedHandler}
+      >
+        {topic}
+      </li>
+    );
+  });
+
+  const searchOptionsList = searchOptions
+    ? searchOptions.map((item) => {
+        return (
+          <li
+            key={item.id}
+            name={item.label}
+            value={item.label}
+            onClick={itemSelectedHandler}
+          >
+            {item.label}
+          </li>
+        );
+      })
+    : null;
+
+  const searchBoxListStyle = searchBoxIsFocused
+    ? "search-options__list--active"
+    : "search-options__list--inactive";
+
+  const searchBoxList = (
+    <ul className={searchBoxListStyle}>
+      {defaultOptionsList}
+    </ul>
+  );
+
+  const searchBox = (
+    <div
+      className="search-box"
+    >
       <input
         type="search"
-        value={inputValue}
+        value={inputValue || defaultOptionValue}
+        onFocus={handleSearchBoxOnFocus}
+      // onBlur={handleSearchBoxOnBlur}
         onChange={handleInputChange}
-        list="suggestion-options"
         placeholder="Search"
-        className="topic-search__input"
+        className="search__input"
         size="25"
       />
-      <datalist id="suggestion-options">
-        {suggestions.length === 0 ? datalistOptions : suggestionOptions}
-      </datalist>
+      {searchBoxList}
     </div>
   );
 
@@ -126,10 +124,39 @@ const QueryForm = (props) => {
     />
   );
 
+  // send user input on each key stroke (anytime the inputValue changes)
+  useEffect(() => {
+    const wikidataSearchUrl = "https://www.wikidata.org/w/api.php";
+    const wikidataParams =
+      "?action=wbsearchentities" +
+      "&format=json" +
+      "&language=en" +
+      "&limit=10" +
+      "&search=" +
+      inputValue +
+      "&origin=*";
+    axios.get(wikidataSearchUrl + wikidataParams).then((response) => {
+      console.log("response.data.search: ", response.data.search);
+      setSearchOptions(response.data.search);
+    });
+  }, [inputValue]);
+
+  function onSubmitHandler(event) {
+    event.preventDefault();
+    if (chosenChart.length !== 0 && inputValue.length !== 0) {
+      const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
+      queryDispatcher.query(query).then((resource) => {
+        props.onQuerySubmit(resource, chosenChart, inputValue, chosenProperty);
+      });
+    } else {
+      // alert("Please select a chart and a topic");
+    }
+  }
+
   return (
     <form onSubmit={onSubmitHandler} className="query-form">
       {chartDropdownMenu}
-      {search}
+      {searchBox}
       {exploreButton}
     </form>
   );
