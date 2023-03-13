@@ -1,38 +1,34 @@
 const queryData = {
   endpointUrl: "https://query.wikidata.org/sparql",
-  charts: [
-    "Network Diagram",
-    "Tree Chart",
-    "Table",
-  ],
+  charts: ["Network Diagram", "Tree Chart", "Table"],
   topics: [
-    "Computer Science",
-    "Artificial intelligence",
-    "Software Engineering",
-    "Mathematics",
-    "Physics",
-    "Philosophy",
-    "Medicine",
-    "Neuroscience",
-    "Psychology",
-    "Biology",
-    "Chemistry",
-    "Geography",
-    "History",
-    "Literature",
-    "Music",
-    "Politics",
-    "Religion",
-    "Sociology",
-    "Sports",
+    "Astronomy",
     "Art",
-    "Film",
+    "Artificial intelligence",
+    "Biology",
     "Business",
+    "Chemistry",
+    "Computer Science",
     "Economics",
     "Engineering",
-    "Law",
-    "Astronomy",
+    "Film",
+    "Geography",
     "Geology",
+    "History",
+    "Law",
+    "Literature",
+    "Mathematics",
+    "Medicine",
+    "Music",
+    "Neuroscience",
+    "Philosophy",
+    "Physics",
+    "Politics",
+    "Psychology",
+    "Religion",
+    "Sociology",
+    "Software Engineering",
+    "Sports",
   ],
   wikidataItems: {
     "Computer Science": "Q21198",
@@ -67,7 +63,7 @@ const queryData = {
   wikidataProperties: {
     "Subclass of": "P279",
     "Part of": "P361",
-    "Has part(s)": "P527"
+    "Has part(s)": "P527",
   },
   propertyDescription: {
     "Subclass of":
@@ -90,7 +86,6 @@ const queryData = {
     SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
   }
   LIMIT 1000`,
-
 };
 
 export default queryData;
