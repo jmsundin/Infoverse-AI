@@ -27,85 +27,69 @@ const QueryForm = (props) => {
   }
   LIMIT 1000`;
 
-  function handleSearchBoxOnFocus() {
-    setSearchBoxIsFocused((prevState) => !prevState);
-  }
-
-  function handleSearchBoxOnBlur() {
-    setSearchBoxIsFocused((prevState) => !prevState);
-  }
-
   function handleInputChange(event) {
     setInputValue(event.target.value);
   }
 
   function itemSelectedHandler(event) {
-    setInputValue(event.target.textContent);
-    setDefaultOptionValue(event.target.textContent);
+    setInputValue(event.target.value);
+    setDefaultOptionValue(event.target.value);
   }
 
   const chartDropdownMenu = (
     <div className="chart-menu">
-      <button className="chart-menu__button">
-        {chosenChart.length > 0 ? chosenChart : "Select a Chart"}
-      </button>
-      <ul className="chart-menu__dropdown">
+      <select
+        className="chart-menu__btn"
+        onChange={(event) => setChosenChart(event.target.value)}
+      >
+        <option value="" disabled selected>
+          Select a Chart
+        </option>
         {queryData.charts.map((chart) => (
-          <li key={chart} onClick={() => setChosenChart(chart)}>
+          <option key={chart} value={chart} className="chart-menu__item">
             {chart}
-          </li>
+          </option>
         ))}
-      </ul>
+      </select>
     </div>
   );
 
   const defaultOptionsList = queryData.topics.map((topic) => {
     return (
-      <li
+      <option
         key={wikidataItems[topic]}
         name={topic}
         value={topic}
         onClick={itemSelectedHandler}
-      >
-        {topic}
-      </li>
+      />
     );
   });
 
   const searchOptionsList = searchOptions
     ? searchOptions.map((item) => {
         return (
-          <li
+          <option
             key={item.id}
             name={item.label}
             value={item.label}
             onClick={itemSelectedHandler}
-          >
-            {item.label}
-          </li>
+          />
         );
       })
     : null;
 
-  const searchBoxListStyle = searchBoxIsFocused
-    ? "search-options__list--active"
-    : "search-options__list--inactive";
-
   const searchBoxList = (
-    <ul className={searchBoxListStyle}>
-      {defaultOptionsList}
-    </ul>
+    <datalist id="search-box__list" className="search-box__list">
+      {searchOptionsList || defaultOptionsList}
+    </datalist>
   );
 
   const searchBox = (
-    <div
-      className="search-box"
-    >
+    <div className="search-box">
       <input
         type="search"
+        list="search-box__list"
         value={inputValue || defaultOptionValue}
-        onFocus={handleSearchBoxOnFocus}
-      // onBlur={handleSearchBoxOnBlur}
         onChange={handleInputChange}
         placeholder="Search"
         className="search__input"
@@ -149,7 +133,7 @@ const QueryForm = (props) => {
         props.onQuerySubmit(resource, chosenChart, inputValue, chosenProperty);
       });
     } else {
-      // alert("Please select a chart and a topic");
+      console.log("Please select a chart and enter a search term.");
     }
   }
 
