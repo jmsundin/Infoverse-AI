@@ -1,66 +1,129 @@
 .hamburger-menu {
   width: 1.5rem;
   height: 1.5rem;
-  position: relative;
-  transform: rotate(0deg);
-  transition: 0.4s ease-in-out;
   cursor: pointer;
+  position: relative;
 }
 
-span.bar {
-  display: inline-block;
+span.bar:nth-child(1) {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
+  display: inline-block;
   width: 1.5rem;
   height: 0.2rem;
+  padding: 0;
+  margin: 0;
   background: white;
-  border-radius: 0.8rem;
   opacity: 1;
-  transform: rotate(0deg);
-  transition: 0.25s ease-in-out;
 }
 
-.hamburger-menu span:nth-child(1).bar {
-  top: 0;
+span.bar:nth-child(2) {
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.2rem;
+  padding: 0;
+  margin: 0;
+  background: white;
+  opacity: 1;
 }
 
-.hamburger-menu span:nth-child(2).bar, .hamburger-menu span:nth-child(3).bar {
-  top: 0.6rem;
+span.bar:nth-child(3) {
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.2rem;
+  padding: 0;
+  margin: 0;
+  background: white;
+  opacity: 1;
 }
 
-.hamburger-menu span:nth-child(4).bar {
-  top: 1.2rem;
+/* Position and sizing of burger button */
+.bm-burger-button {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
-div.hamburger-menu .menu-list-items {
-
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: none;
 }
 
-div.hamburger-menu.open span:nth-child(1).bar {
-  top: 0.6rem;
-  width: 0%;
-  left: 50%;
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
-div.hamburger-menu.open span:nth-child(2).bar {
-  transform: rotate(45deg);
+/* Color/shape of close button cross */
+.bm-cross {
+  color: white;
 }
 
-div.hamburger-menu.open span:nth-child(3).bar {
-  transform: rotate(-45deg);
-}
-
-div.hamburger-menu.open span:nth-child(4).bar {
-  top: 0.6rem;
-  width: 0%;
-  left: 50%;
-}
-
-div.hamburger-menu.open .menu-list-items {
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
   position: absolute;
   top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
+  right: 0;
+  height: 100%;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  font-size: 1.4rem;
+  text-decoration: none;
+  width: 100%;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  align-items: center;
+  text-decoration: none;
+}
+
+.bm-item ul {
+  display: inline-block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bm-item a {
+  color: white;
+  text-decoration: none;
+}
+
+.bm-item a:hover {
+  color: #b8b7ad;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  display: none;
 }

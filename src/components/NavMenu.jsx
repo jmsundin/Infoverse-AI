@@ -1,48 +1,12 @@
 import React, { useState, useEffect } from "react";
 // https://www.npmjs.com/package/react-burger-menu
 import { slide as Menu } from "react-burger-menu";
-import MenuItems from "./MenuItems";
-import routes from "../data/routes";
 import { useMediaQuery } from "react-responsive";
 
 import "../assets/NavMenu.css";
-import "../assets/MenuModal.css";
-import "../assets/MenuItems.css";
+import "../assets/HamburgerMenu.css";
 
 const NavMenu = () => {
-  const sideMenuStyles = {
-    bmBurgerButton: {
-      position: "fixed",
-      width: "36px",
-      height: "30px",
-      right: "36px",
-      top: "36px",
-    },
-    bmMenuWrap: {
-      position: "fixed",
-      height: "100%",
-    },
-    bmMenu: {
-      background: "#373a47",
-      padding: "2.5em 1.5em 0",
-      fontSize: "1.15em",
-    },
-    bmMorphShape: {
-      fill: "#373a47",
-    },
-    bmItemList: {
-      margin: 0,
-      padding: 0,
-      display: "flex",
-      flexDirection: "column",
-    },
-    bmItem: {
-      "align-items": "center",
-    },
-    bmOverlay: {
-      background: "rgba(0, 0, 0, 0.8)",
-    },
-  };
   const isDesktopLaptopOrTablet = useMediaQuery({
     query: "(min-width: 501px)",
   });
@@ -66,32 +30,12 @@ const NavMenu = () => {
     </div>
   );
 
-  // fill="#3b4047"
-
   const hamburgerMenu = (
-    <svg viewBox="0 0 24 24" width="24" height="24">
-      <line
-        x1="0"
-        y1="1"
-        x2="28"
-        y2="1"
-        style={{ stroke: "#fff", strokeWidth: "2.5" }}
-      />
-      <line
-        x1="0"
-        y1="8"
-        x2="28"
-        y2="8"
-        style={{ stroke: "#fff", strokeWidth: "2.5" }}
-      />
-      <line
-        x1="0"
-        y1="15"
-        x2="28"
-        y2="15"
-        style={{ stroke: "#fff", strokeWidth: "2.5" }}
-      />
-    </svg>
+    <div className="hamburger-menu">
+      <span className="bar"></span>
+      <span className="bar"></span>
+      <span className="bar"></span>
+    </div>
   );
 
   const crossIcon = (
@@ -107,10 +51,30 @@ const NavMenu = () => {
         x1="1"
         y1="20"
         x2="20"
-        y2="0"
+        y2="1"
         style={{ stroke: "#fff", strokeWidth: "2.5" }}
       />
     </svg>
+  );
+
+  const menuItems = (
+    <ul>
+      <li key="Home">
+        <a href="/home" alt="Home">
+          Home
+        </a>
+      </li>
+      <li key="About">
+        <a href="/about" alt="About">
+          About
+        </a>
+      </li>
+      <li key="Contact">
+        <a href="/contact" alt="Contact">
+          Contact
+        </a>
+      </li>
+    </ul>
   );
 
   return (
@@ -123,10 +87,9 @@ const NavMenu = () => {
           isOpen={isOpen}
           onOpen={onOpenMenuHandler}
           onClose={onCloseMenuHandler}
-          styles={sideMenuStyles}
           right
         >
-          <MenuItems routes={routes} />
+          {menuItems}
         </Menu>
       </nav>
     </header>
