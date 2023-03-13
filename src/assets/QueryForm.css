@@ -15,7 +15,7 @@
   border: none;
 }
 
-.chart-menu__button {
+.chart-menu__btn {
   min-width: 11rem;
   background-color: white;
   font-size: 1.1rem;
@@ -28,7 +28,7 @@
   margin: 0;
 }
 
-.chart-menu__button:hover {
+.chart-menu__btn:hover {
   background-color: #ccc;
 }
 
@@ -54,17 +54,17 @@
   border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.chart-menu__dropdown li {
+.chart-menu__item {
   font-size: 1.1rem;
   text-align: center;
   padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
-.chart-menu__dropdown li:not(:last-child) {
+.chart-menu__item:not(:last-child) {
   border-bottom: 0.1rem solid #ccc;
 }
 
-.chart-menu__dropdown li:hover {
+.chart-menu__item:hover, .chart-menu__item:active {
   margin: 0;
   cursor: pointer;
   background-color: #ccc;
@@ -92,7 +92,7 @@
   font-size: 1.1rem;
 }
 
-.search-options__list--active {
+.search-box__list {
   position: absolute;
   top: 37px;
   left: 0;
@@ -107,25 +107,21 @@
   z-index: 1;
 }
 
-.search-options__list--active li {
+.search-box__list option {
   display: list-item;
   font-size: 1.1rem;
   text-align: center;
   padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
-.search-options__list--active li:not(:last-child) {
+.search-box__list option:not(:last-child) {
   border-bottom: 0.1rem solid #ccc;
 }
 
-.search-options__list--active li:hover {
+.search-box__list option:hover {
   margin: 0;
   cursor: pointer;
   background-color: #ccc;
-}
-
-.search-options__list--inactive {
-  display: none;
 }
 
 .explore-button {
