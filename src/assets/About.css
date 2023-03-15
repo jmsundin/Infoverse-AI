@@ -1,23 +1,76 @@
 .about-section {
+    margin: 0;
+    padding: 0 0.5rem;
     background: #f8f8f8;
-    padding: 2rem 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
     text-align: center;
+}
+
+.about-section p {
+  margin: 0.15rem 0;
 }
 
 .how-to-section {
+    margin: 0;
+    padding: 0 0.5rem;
     background: #fff;
-    padding: 2rem 0;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.how-to-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.how-to-section p {
+  margin: 0.15rem 0;
 }
 
 .technologies-section {
+    margin: 0;
+    padding: 0 0.5rem;
     background: #f8f8f8;
-    padding: 2rem 0;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+.technologies-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
 }
+
+.technologies-section p {
+  margin: 0.15rem 0;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    border: none;
+    justify-content: center;
+  }
+
+@media only screen and (min-width:768px) {
+    .card {
+      width: 50vw;
+    }
+  }

@@ -7,45 +7,74 @@ const About = () => {
   return (
     <React.Fragment>
       <NavMenu />
-      <section className="about-section">
-        <h1>About</h1>
-        <p>
-          Infoverse.ai is a tool for visualizing the relationships between
-          concepts in the world. The tool is based on the Wikidata knowledge
-          graph, which contains the information about people, places, things,
-          and ideas. The tool allows you to explore the relationships between
-          concepts in the world, and to visualize them in a variety of ways.
-        </p>
-      </section>
-      <section className="how-to-section">
-        <h2>How to use the tool</h2>
-        <p>
-          <ul>
-            <li>Pick a chart type from the dropdown menu on the left.</li>
-            <li>Pick a topic from the dropdown menu on the right.</li>
-            <li>Then, hit the "Explore" button. You can interact with the chart displayed in the canvas below the form.</li>
-          </ul>
-        </p>
-      </section>
-      <section className="technologies-section">
-        <h2>Technologies used in this project</h2>
-        <p>
-          <ul>
-            <li>
-              <a href="https://reactjs.org/">React</a>
-            </li>
-            <li>
-              <a href="https://query.wikidata.org/">Wikidata SPARQL endpoint</a>
-            </li>
-            <li>
-              <a href="https://visjs.org/">Vis.js</a>
-            </li>
-            <li>
-              <a href="https://d3js.org/">D3.js</a>
-            </li>
-          </ul>
-        </p>
-      </section>
+      <div className="about-section">
+        <div className="card">
+          <h2>About Infoverse AI</h2>
+          <p>
+            &emsp; &emsp; Infoverse AI helps you visualize and explore the
+            relations between topics. The data comes from{" "}
+            <a href="https://wikidata.org">Wikidata.org</a> and{" "}
+            <a href="https://wikipedia.org">Wikipedia.org</a>, sister projects
+            of <a href="https://wikimedia.org">Wikimedia.org</a>.
+          </p>
+        </div>
+      </div>
+      <div className="how-to-section">
+        <div className="card">
+          <h2>How to Use Infoverse AI:</h2>
+          <p>
+            <ol>
+              <li>Pick a chart type from the dropdown menu on the left.</li>
+              <li>
+                You can pick a suggested topic by clicking on the Search bar, or
+                you can Search for a Topic.
+              </li>
+              <li>
+                Then, hit the "Explore" button. You can interact with the chart
+                displayed in the canvas below the form.
+              </li>
+            </ol>
+          </p>
+        </div>
+      </div>
+      <div className="technologies-section">
+        <div className="card">
+          <h2>Technologies Used in this Site:</h2>
+          <p>
+            <ul>
+              <li>
+                Frontend JavaScript Library:{" "}
+                <a href="https://reactjs.org/">React</a>
+              </li>
+              <li>
+                Wikidata SPARQL Endpoint:{" "}
+                <a href="https://query.wikidata.org/">SPARQL</a>
+              </li>
+              <li>
+                Network Diagram: <a href="https://visjs.org/">Vis.js</a>
+              </li>
+              <li>
+                Data Driven Documents (D3):{" "}
+                <a href="https://d3js.org/">D3.js</a>
+              </li>
+              <li>
+                Data sources:
+                <ul>
+                  <li>
+                    <a href="https://wikimedia.org">Wikimedia.org</a>
+                  </li>
+                  <li>
+                    <a href="https://wikidata.org">Wikidata.org</a>
+                  </li>
+                  <li>
+                    <a href="https://wikipedia.org">Wikipedia.org</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </p>
+        </div>
+      </div>
     </React.Fragment>
   );
 };

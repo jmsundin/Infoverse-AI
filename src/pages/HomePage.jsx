@@ -13,6 +13,7 @@ const Home = () => {
 
   const onQuerySubmit = useCallback(
     (resource, chart, chosenTopic, chosenProperty) => {
+      console.log("Resource: ", resource);
       setData(resource);
       setChosenChart(chart);
       setChosenTopic(chosenTopic);
