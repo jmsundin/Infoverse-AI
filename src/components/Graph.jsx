@@ -7,33 +7,34 @@ import PropTypes from "prop-types";
 
 import "vis-network/styles/vis-network.css";
 
-import { transformDataForVisNetwork } from "../utils/Helper/transformData";
-import visNetworkDummyData from "../data/visNetworkDummyData";
+import { transformDataForVisNetwork } from "../utils/transformData";
 
+Graph.propTypes = {
+  data: PropTypes.object,
+  options: PropTypes.object,
+  es: PropTypes.object,
+  style: PropTypes.object,
+  getNetwork: PropTypes.func,
+  getNodes: PropTypes.func,
+  getEdges: PropTypes.func,
+};
 
-const VisNetworkGraph = ({
-  data,
-  options,
-  events,
+function Graph({
+  data, 
+  options, 
+  es,
   style = {},
   getNetwork,
   getNodes,
   getEdges,
-}) => {
-  if(data === null){
-    data = visNetworkDummyData;
-  }else{
-    data = transformDataForVisNetwork(data);
-  }
+}) {
 
-  style = { width: "100%",
-            height: "100%",
-          };
+  // data = transformDataForVisNetwork(data);
+  
+  style = { width: "100%", height: "100%" };
 
   let nodes = useRef(new DataSet(data.nodes));
   let edges = useRef(new DataSet(data.edges));
-  // console.log("nodes: ", JSON.stringify(nodes.current.get()));
-  // console.log("edges: ", JSON.stringify(edges.current.get()));
 
   const network = useRef(null);
   const container = useRef(null);
@@ -122,30 +123,20 @@ const VisNetworkGraph = ({
   }, [options]);
 
   useEffect(() => {
-    // Add user provied events to network
+    // Add user provied es to network
     // eslint-disable-next-line no-restricted-syntax
-    for (const eventName of Object.keys(events)) {
-      network.current.on(eventName, events[eventName]);
+    for (const eName of Object.keys(es)) {
+      network.current.on(eName, es[eName]);
     }
 
     return () => {
-      for (const eventName of Object.keys(events)) {
-        network.current.off(eventName, events[eventName]);
+      for (const eName of Object.keys(es)) {
+        network.current.off(eName, es[eName]);
       }
     };
-  }, [events]);
+  }, [es]);
 
   return <div ref={container} style={style} />;
-};
+}
 
-VisNetworkGraph.propTypes = {
-  data: PropTypes.object,
-  options: PropTypes.object,
-  events: PropTypes.object,
-  style: PropTypes.object,
-  getNetwork: PropTypes.func,
-  getNodes: PropTypes.func,
-  getEdges: PropTypes.func,
-};
-
-export default VisNetworkGraph;
+export default Graph;

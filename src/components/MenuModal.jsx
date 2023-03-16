@@ -9,8 +9,8 @@ function MenuModal(props) {
   const modalRef = useRef();
 
   useEffect(() => {
-    const handleClickOnBackground = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleClickOnBackground = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };

@@ -1,5 +1,31 @@
-import visNetworkDummyData from "../../data/visNetworkDummyData";
-import d3TreeDummyData from "../../data/d3TreeDummyData";
+import visNetworkDummyData from "../data/visNetworkDummyData";
+import d3TreeDummyData from "../data/d3TreeDummyData";
+
+export function objectToGraphData(data) {
+  let graphData = {
+    nodes: [],
+    edges: [],
+  };
+
+  if (data) {
+    data.forEach((item) => {
+      let newNode = {};
+      newNode.id = item.id;
+      newNode.label = item.label;
+      newNode.pageId = item.pageId;
+      newNode.url = item.url;
+      graphData.nodes.push(newNode);
+    });
+    data.forEach((item) => {
+      let newEdge = {};
+      newEdge.from = item.id;
+      newEdge.to = item.child;
+      graphData.edges.push(newEdge);
+    });
+  }
+
+  return graphData;
+}
 
 export function transformDataForVisNetwork(data) {
   let bindings = data?.results?.bindings;

@@ -27,6 +27,7 @@
   font-weight: bold;
   line-height: 1.2;
   padding: 0.6rem;
+  z-index: 1;
 }
 
 .main-header__logo a:hover {
