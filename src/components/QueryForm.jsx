@@ -1,51 +1,134 @@
-import React, { useState, useEffect, useRef } from "react";
-import Select from "react-select";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import Network from "../utils/Network";
+import wikidata from "../data/queryData";
+import { objectToGraphData } from "../utils/transformData";
 
-import axios from "axios";
-import Network from "../utils/Networking/Network";
-import { SPARQLQueryDispatcher } from "../utils/Networking/SPARQLQueryDispatcher";
-import queryData from "../utils/Networking/queryData";
+import DatalistInput from "react-datalist-input";
 
 import "../assets/QueryForm.css";
 
 const QueryForm = (props) => {
-  const [searchBoxIsFocused, setSearchBoxIsFocused] = useState(false);
-  const [chosenChart, setChosenChart] = useState("");
+  const sparqlEndpoint = "https://query.wikidata.org/sparql";
+
+  const [chosenChart, setChosenChart] = useState("Network Diagram");
+  const [searchOptions, setSearchOptions] = useState(wikidata.topics);
   const [inputValue, setInputValue] = useState("");
-  const [defaultOptionValue, setDefaultOptionValue] = useState("");
-  const [searchOptions, setSearchOptions] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState({
+    id: null,
+    value: null,
+    label: null,
+  });
+
   const [chosenProperty, setChosenProperty] = useState("Subclass of");
 
-  const wikidataItems = queryData.wikidataItems;
-  const wikidataProperties = queryData.wikidataProperties;
+  const [data, setData] = useState(null);
 
-  let query = `SELECT ?child ?childLabel ?grandChild ?grandChildLabel ?greatGrandChild ?greatGrandChildLabel WHERE {
-    ?child wdt:${wikidataProperties[chosenProperty]} wd:${wikidataItems[inputValue]} .
-    ?grandChild wdt:${wikidataProperties[chosenProperty]} ?child .
-    ?greatGrandChild wdt:${wikidataProperties[chosenProperty]} ?grandChild .
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en,en"  }  
-  }
-  LIMIT 1000`;
+  const searchOptionItems = useMemo(() => {
+    return searchOptions.map((topic) => {
+      return {
+        id: topic.id,
+        value: topic.value || topic.label,
+        node: (
+          <>
+            <b>{topic.value || topic.label}</b>
+            <br />
+            <span>{topic.description}</span>
+          </>
+        ),
+      };
+    });
+  }, [searchOptions]);
+
+  const searchBoxAndDropdownList = useMemo(() => {
+    return (
+      <DatalistInput
+        label={false}
+        placeholder="Search for a topic to explore"
+        value={inputValue}
+        items={searchOptionItems}
+        onSelect={handleSelectedTopic}
+        onChange={handleInputChange}
+      />
+    );
+  }, [inputValue, searchOptionItems]);
 
   function handleInputChange(event) {
     setInputValue(event.target.value);
   }
 
-  function itemSelectedHandler(event) {
-    setInputValue(event.target.value);
-    setDefaultOptionValue(event.target.value);
+  function handleSelectedTopic(topic) {
+    const item = {
+      id: topic.id,
+      value: topic.value || topic.label,
+      label: topic.value || topic.label,
+    };
+    setSelectedTopic(item);
+
+    // TODO: need to correctly get the forward links for the selected item
+    // objectToGraphData(topic);
+  }
+
+  // live search for topics based on typed user input
+  useEffect(() => {
+    if (inputValue !== null && inputValue !== undefined && inputValue !== "") {
+      async function fetchData() {
+        const wikidataSearchEndpoint = "https://www.wikidata.org/w/api.php";
+        const params =
+          "?action=wbsearchentities" +
+          "&format=json" +
+          "&language=en" +
+          "&limit=10" +
+          "&origin=*" +
+          "&search=" +
+          inputValue;
+        const url = wikidataSearchEndpoint + params;
+
+        const items = await Network.fetchData(url);
+        setSearchOptions(items);
+      }
+      fetchData();
+    }
+  }, [inputValue]);
+
+  function onSubmitHandler(e) {
+    e.preventDefault();
+    if (selectedTopic.id === null || selectedTopic.id === undefined) {
+      alert("Please select a topic to explore");
+      return;
+    }
+    async function sparqlQuery() {
+      // P:279 is the property for subclass of
+      let sparqlQuery = `SELECT ?item ?itemLabel 
+        WHERE {
+          ?item p:P279 ?statement0.
+          ?statement0 (ps:P279/(wdt:P279*)) wd:${selectedTopic.id}.
+          SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+        }
+      LIMIT 10`;
+
+      const data = await Network.sparqlQuery(sparqlQuery);
+      console.log("data bindings:", data.results.bindings);
+      setData(data.results.bindings);
+      return data.results.bindings;
+    }
+    setData(sparqlQuery());
   }
 
   const chartDropdownMenu = (
     <div className="chart-menu">
       <select
+        defaultValue={"Network Diagram"}
         className="chart-menu__btn"
-        onChange={(event) => setChosenChart(event.target.value)}
+        onChange={(e) => setChosenChart(e.target.value)}
       >
-        <option value="" disabled selected>
-          Select a Chart
-        </option>
-        {queryData.charts.map((chart) => (
+        <option disabled>Select a Chart</option>
+        {wikidata.charts.map((chart) => (
           <option key={chart} value={chart} className="chart-menu__item">
             {chart}
           </option>
@@ -54,93 +137,14 @@ const QueryForm = (props) => {
     </div>
   );
 
-  const defaultOptionsList = queryData.topics.map((topic) => {
-    return (
-      <option
-        key={wikidataItems[topic]}
-        name={topic}
-        value={topic}
-        onClick={itemSelectedHandler}
-      />
-    );
-  });
-
-  const searchOptionsList = searchOptions
-    ? searchOptions.map((item) => {
-        return (
-          <option
-            key={item.id}
-            name={item.label}
-            value={item.label}
-            onClick={itemSelectedHandler}
-          />
-        );
-      })
-    : null;
-
-  const searchBoxList = (
-    <datalist id="search-box__list" className="search-box__list">
-      {searchOptionsList || defaultOptionsList}
-    </datalist>
-  );
-
-  const searchBox = (
-    <div className="search-box">
-      <input
-        type="search"
-        list="search-box__list"
-        value={inputValue || defaultOptionValue}
-        onChange={handleInputChange}
-        placeholder="Search"
-        className="search__input"
-        size="25"
-      />
-      {searchBoxList}
-    </div>
-  );
-
   const exploreButton = (
-    <input
-      type="submit"
-      value="Explore"
-      className="explore-button"
-      onClick={onSubmitHandler}
-    />
+    <input type="submit" value="Explore" className="explore-button" />
   );
-
-  // send user input on each key stroke (anytime the inputValue changes)
-  useEffect(() => {
-    const wikidataSearchUrl = "https://www.wikidata.org/w/api.php";
-    const wikidataParams =
-      "?action=wbsearchentities" +
-      "&format=json" +
-      "&language=en" +
-      "&limit=10" +
-      "&search=" +
-      inputValue +
-      "&origin=*";
-    axios.get(wikidataSearchUrl + wikidataParams).then((response) => {
-      console.log("response.data.search: ", response.data.search);
-      setSearchOptions(response.data.search);
-    });
-  }, [inputValue]);
-
-  function onSubmitHandler(event) {
-    event.preventDefault();
-    if (chosenChart.length !== 0 && inputValue.length !== 0) {
-      const queryDispatcher = new SPARQLQueryDispatcher(queryData.endpointUrl);
-      queryDispatcher.query(query).then((resource) => {
-        props.onQuerySubmit(resource, chosenChart, inputValue, chosenProperty);
-      });
-    } else {
-      console.log("Please select a chart and enter a search term.");
-    }
-  }
 
   return (
     <form onSubmit={onSubmitHandler} className="query-form">
       {chartDropdownMenu}
-      {searchBox}
+      {searchBoxAndDropdownList}
       {exploreButton}
     </form>
   );
