@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { transformDataForD3ReactTree } from "../utils/Helper/transformData";
+import { transformDataForD3ReactTree } from "../utils/transformData";
 import d3TreeDummyDataFlare from "../data/d3TreeDummyDataFlare-2";
 import { svg } from "d3";
 
@@ -58,7 +58,7 @@ function ZoomableTreemap(props) {
     const text = cell
       .append("text")
       .style("user-select", "none")
-      .attr("pointer-events", "none")
+      .attr("pointer-es", "none")
       .attr("x", 4)
       .attr("y", 13)
       .attr("fill-opacity", (d) => +labelVisible(d));
@@ -79,7 +79,7 @@ function ZoomableTreemap(props) {
           .join("/")}\n${format(d.value)}`
     );
 
-    function clicked(event, p) {
+    function clicked(e, p) {
       focus = focus === p ? (p = p.parent) : p;
 
       root.each(

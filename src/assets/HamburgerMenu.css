@@ -75,6 +75,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   top: 0;
   right: 0;
   height: 100%;
+  width: 200px;
 }
 
 /* General sidebar styles */
@@ -96,6 +97,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   margin: 0;
   padding: 0;
   text-align: center;
+  list-style: none;
 }
 
 /* Individual item */
@@ -104,6 +106,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   margin: 0.5rem 0;
   padding: 0 1rem;
   align-items: center;
+  list-style: none;
   text-decoration: none;
 }
 

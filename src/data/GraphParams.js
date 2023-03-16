@@ -1,4 +1,4 @@
-export default visNetworkParams = {
+export default GraphParams = {
     events: {
     click: function (params) {
       params.event = "[original event]";

@@ -1,5 +1,5 @@
 import uuid from "react-uuid";
-import parseNestedObj from "../utils/Helper/parseNestedObj";
+import parseNestedObj from "../utils/parseNestedObj";
 import visNetworkDummyData from "../data/visNetworkDummyData";
 import styled from "styled-components";
 
