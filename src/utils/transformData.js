@@ -1,28 +1,69 @@
 import visNetworkDummyData from "../data/visNetworkDummyData";
 import d3TreeDummyData from "../data/d3TreeDummyData";
 
-export function objectToGraphData(data) {
+export function transformDefaultSuggestions(root, data) {
+  let graphData = {
+    nodes: [],
+    edges: [],
+  }
+
+  graphData.nodes.push(root);
+
+  if (data.length > 0) {
+    data.forEach((item) => {
+      let newNode = {};
+      newNode.id = item.id;
+      newNode.value = item.value;
+      newNode.label = item.label;
+      newNode.description = item.description;
+      newNode.pageId = item.pageId;
+      newNode.url = item.url;
+
+      graphData.nodes.push(newNode);
+    });
+
+    data.forEach((item) => {
+      let newEdge = {};
+      newEdge.from = root.id;
+      newEdge.to = item.id;
+      
+      graphData.edges.push(newEdge);
+    });
+  }
+  return graphData;
+}
+
+export function objectToGraphData(root, data) {
   let graphData = {
     nodes: [],
     edges: [],
   };
 
-  if (data) {
-    data.forEach((item) => {
-      let newNode = {};
-      newNode.id = item.id;
-      newNode.label = item.label;
-      newNode.pageId = item.pageId;
-      newNode.url = item.url;
-      graphData.nodes.push(newNode);
-    });
-    data.forEach((item) => {
-      let newEdge = {};
-      newEdge.from = item.id;
-      newEdge.to = item.child;
-      graphData.edges.push(newEdge);
-    });
-  }
+  console.log("root: ", JSON.stringify(root));
+  console.log("data: ", JSON.stringify(data));
+
+  // graphData.nodes.push(root);
+
+  // if (data.length > 0) {
+  //   data.forEach((item) => {
+  //     let newNode = {};
+  //     newNode.id = item.id;
+  //     newNode.value = item.value || item.label;
+  //     newNode.label = item.itemLabel?.value;
+  //     newNode.pageId = item.item?.pageId;
+  //     newNode.url = item.item?.url;
+  //     newNode.description = item.item?.description;
+
+  //     graphData.nodes.push(newNode);
+  //   });
+  //   data.forEach((item) => {
+  //     let newEdge = {};
+  //     newEdge.from = item.id;
+  //     newEdge.to = item.child;
+      
+  //     graphData.edges.push(newEdge);
+  //   });
+  // }
 
   return graphData;
 }

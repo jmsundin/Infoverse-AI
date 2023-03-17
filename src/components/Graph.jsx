@@ -7,35 +7,35 @@ import PropTypes from "prop-types";
 
 import "vis-network/styles/vis-network.css";
 
-import { transformDataForVisNetwork } from "../utils/transformData";
-
-Graph.propTypes = {
-  data: PropTypes.object,
-  options: PropTypes.object,
-  es: PropTypes.object,
-  style: PropTypes.object,
-  getNetwork: PropTypes.func,
-  getNodes: PropTypes.func,
-  getEdges: PropTypes.func,
+const defaultOptions = {
+  physics: {
+    stabilization: false,
+  },
+  autoResize: false,
+  edges: {
+    smooth: false,
+    color: "#000000",
+    width: 0.5,
+    arrows: {
+      to: {
+        enabled: true,
+        scaleFactor: 0.5,
+      },
+    },
+  },
 };
 
-function Graph({
-  data, 
-  options, 
-  es,
-  style = {},
+const Graph = ({
+  data,
+  options = defaultOptions,
+  events = {},
+  style = { width: "100%", height: "100%" },
   getNetwork,
   getNodes,
   getEdges,
-}) {
-
-  // data = transformDataForVisNetwork(data);
-  
-  style = { width: "100%", height: "100%" };
-
-  let nodes = useRef(new DataSet(data.nodes));
-  let edges = useRef(new DataSet(data.edges));
-
+}) => {
+  const nodes = useRef(new DataSet(data.nodes));
+  const edges = useRef(new DataSet(data.edges));
   const network = useRef(null);
   const container = useRef(null);
 
@@ -123,20 +123,30 @@ function Graph({
   }, [options]);
 
   useEffect(() => {
-    // Add user provied es to network
+    // Add user provied events to network
     // eslint-disable-next-line no-restricted-syntax
-    for (const eName of Object.keys(es)) {
-      network.current.on(eName, es[eName]);
+    for (const eventName of Object.keys(events)) {
+      network.current.on(eventName, events[eventName]);
     }
 
     return () => {
-      for (const eName of Object.keys(es)) {
-        network.current.off(eName, es[eName]);
+      for (const eventName of Object.keys(events)) {
+        network.current.off(eventName, events[eventName]);
       }
     };
-  }, [es]);
+  }, [events]);
 
   return <div ref={container} style={style} />;
-}
+};
+
+Graph.propTypes = {
+  data: PropTypes.object,
+  options: PropTypes.object,
+  events: PropTypes.object,
+  style: PropTypes.object,
+  getNetwork: PropTypes.func,
+  getNodes: PropTypes.func,
+  getEdges: PropTypes.func,
+};
 
 export default Graph;

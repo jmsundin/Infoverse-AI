@@ -10,29 +10,38 @@ import GraphParams from "../data/GraphParams";
 import "../assets/Canvas.css";
 
 const Canvas = (props) => {
-  const data = props.data;
-  const [graphNodes, setGraphNodes] = useState([]);
   const chart = props.chart;
-  const chosenTopic = props.chosenTopic;
-  const chosenProperty = props.chosenProperty;
+  const [data, setData] = useState(props.data);
+  const [networkNodes, setNetwortNodes] = useState([]);
 
-  const getGraphNodes = useCallback((a) => {
-    setGraphNodes(a);
+  const handleAddNode = useCallback(() => {
+    const id = data.nodes.length + 1;
+    setData({
+      ...data,
+      nodes: [...data.nodes, { id, label: `Node ${id}` }],
+    });
+  }, [setData, data]);
+
+  const getNodes = useCallback((a) => {
+    setNetwortNodes(a);
   }, []);
 
-  // console.log("Canvas data: ", JSON.stringify(data));
+  const handleGetNodes = useCallback(() => {
+    console.log(networkNodes);
+  }, [networkNodes]);
 
   const chartHandler = (chart) => {
     switch (chart) {
-      case "Network Diagram":
+      case "Graph":
         return (
           <Graph
             data={data}
             options={GraphParams.options}
             events={GraphParams.events}
-            getNodes={getGraphNodes}
-            width="100%"
-            height="100%"
+            style={GraphParams.style}
+            // getNetwork={getNetwork}
+            getNodes={getNodes}
+            // getEdges={getEdges}
           />
         );
 
@@ -41,29 +50,18 @@ const Canvas = (props) => {
           <TreeD3
             data={data}
             chosenTopic={chosenTopic}
-            chosenProperty={chosenProperty}
-            width="100%"
-            height="100%"
           />
         );
       case "Zoomable Treemap":
         return (
           <ZoomableTreemap
             data={data}
-            chosenTopic={chosenTopic}
-            chosenProperty={chosenProperty}
-            width="100%"
-            height="100%"
           />
         );
       case "Table":
         return (
           <Table
             data={data}
-            chosenTopic={chosenTopic}
-            chosenProperty={chosenProperty}
-            width="100%"
-            height="100%"
           />
         );
     }

@@ -1,24 +1,31 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import NavMenu from "../components/NavMenu";
 import QueryForm from "../components/QueryForm";
 import Canvas from "../components/Canvas";
 
 import "../assets/HomePage.css";
 
+import { transformDefaultSuggestions } from "../utils/transformData";
+import { objectToGraphData } from "../utils/transformData";
+import wikidata from "../data/queryData";
+
 const Home = () => {
-  const [data, setData] = useState(null);
-  const [chosenChart, setChosenChart] = useState("Graph (Vis-Network)");
-  const [chosenTopic, setChosenTopic] = useState("Computer Science");
-  const [chosenProperty, setChosenProperty] = useState("Subclass of");
+  const root = {id: "0", label: "Suggested Topics to Explore", value: "Suggested Topics to Explore", description: "Suggested Topics to Explore", pageId: "0", url: "https://en.wikipedia.org/wiki/Special:Random" };
+
+  const graphData = transformDefaultSuggestions(root, wikidata.suggestedTopics);
+  console.log("graphData: ", graphData);
+
+  const [data, setData] = useState(graphData);
+  const [chosenChart, setChosenChart] = useState("Graph");
+  const [chosenTopic, setChosenTopic] = useState("Suggested Topics to Explore");
 
   const onQuerySubmit = useCallback(
     (resource, chart, chosenTopic, chosenProperty) => {
       setData(resource);
       setChosenChart(chart);
       setChosenTopic(chosenTopic);
-      setChosenProperty(chosenProperty);
     },
-    [setData, setChosenChart, setChosenTopic, setChosenProperty]
+    [setData, setChosenChart, setChosenTopic]
   );
 
   return (
@@ -29,7 +36,6 @@ const Home = () => {
         data={data}
         chart={chosenChart}
         chosenTopic={chosenTopic}
-        chosenProperty={chosenProperty}
       />
     </React.Fragment>
   );

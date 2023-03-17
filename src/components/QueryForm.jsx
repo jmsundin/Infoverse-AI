@@ -14,18 +14,14 @@ import DatalistInput from "react-datalist-input";
 import "../assets/QueryForm.css";
 
 const QueryForm = (props) => {
-  const sparqlEndpoint = "https://query.wikidata.org/sparql";
-
-  const [chosenChart, setChosenChart] = useState("Network Diagram");
-  const [searchOptions, setSearchOptions] = useState(wikidata.topics);
+  const [chosenChart, setChosenChart] = useState("Graph");
+  const [searchOptions, setSearchOptions] = useState(wikidata.suggestedTopics);
   const [inputValue, setInputValue] = useState("");
   const [selectedTopic, setSelectedTopic] = useState({
     id: null,
     value: null,
     label: null,
   });
-
-  const [chosenProperty, setChosenProperty] = useState("Subclass of");
 
   const [data, setData] = useState(null);
 
@@ -69,9 +65,9 @@ const QueryForm = (props) => {
       label: topic.value || topic.label,
     };
     setSelectedTopic(item);
+    setInputValue(item.value);
 
-    // TODO: need to correctly get the forward links for the selected item
-    // objectToGraphData(topic);
+    // TODO: once selected, send sparql query to get related topics
   }
 
   // live search for topics based on typed user input
@@ -96,6 +92,31 @@ const QueryForm = (props) => {
     }
   }, [inputValue]);
 
+  const chartDropdownMenu = (
+    <div className="chart-menu">
+      <select
+        defaultValue={"Graph"}
+        className="chart-menu__btn"
+        onChange={(e) => setChosenChart(e.target.value)}
+      >
+        <option disabled>Select a Chart</option>
+        <option key="Graph" value="Graph" className="chart-menu__item">
+          Graph
+        </option>
+        <option key="Tree" value="Tree" className="chart-menu__item">
+          Tree
+        </option>
+        <option key="Table" value="Table" className="chart-menu__item">
+          Table
+        </option>
+      </select>
+    </div>
+  );
+
+  const exploreButton = (
+    <input type="submit" value="Explore" className="explore-button" />
+  );
+
   function onSubmitHandler(e) {
     e.preventDefault();
     if (selectedTopic.id === null || selectedTopic.id === undefined) {
@@ -114,32 +135,19 @@ const QueryForm = (props) => {
 
       const data = await Network.sparqlQuery(sparqlQuery);
       console.log("data bindings:", data.results.bindings);
-      setData(data.results.bindings);
-      return data.results.bindings;
+
+      const root = {
+        id: selectedTopic.id,
+        label: selectedTopic.label,
+        pageId,
+        url,
+      };
+      const graphData = objectToGraphData(root, data.results.bindings);
+      setData(graphData);
+      console.log("graphData:", graphData);
     }
-    setData(sparqlQuery());
+    sparqlQuery();
   }
-
-  const chartDropdownMenu = (
-    <div className="chart-menu">
-      <select
-        defaultValue={"Network Diagram"}
-        className="chart-menu__btn"
-        onChange={(e) => setChosenChart(e.target.value)}
-      >
-        <option disabled>Select a Chart</option>
-        {wikidata.charts.map((chart) => (
-          <option key={chart} value={chart} className="chart-menu__item">
-            {chart}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-
-  const exploreButton = (
-    <input type="submit" value="Explore" className="explore-button" />
-  );
 
   return (
     <form onSubmit={onSubmitHandler} className="query-form">
