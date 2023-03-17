@@ -20,13 +20,9 @@ class Network {
   }
 
   static async sparqlQuery(sparqlQuery) {
-    const url = this.wikidataSparqlEndpoint;
-
-    const response = await axios.get(url, {
-      params: {
-        query: sparqlQuery,
-        format: "json",
-      },
+    const response = await axios.post({
+      url: this.wikidataSparqlEndpoint,
+      data: sparqlQuery,
       headers: {
         Accept: "application/sparql-results+json",
       },
@@ -34,7 +30,6 @@ class Network {
     return response.data;
   }
 
-  // TODO: in ord
   static async getWikidataPageForwardLinks(pageId) {
     const params =
       "?action=parse" +

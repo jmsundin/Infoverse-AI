@@ -5,9 +5,9 @@ import d3TreeDummyDataFlare from "../data/d3TreeDummyDataFlare-2";
 import { svg } from "d3";
 
 function ZoomableTreemap(props) {
-  let data = d3TreeDummyDataFlare;
-  const width = props.width;
-  const height = props.height;
+  let data = props.data || d3TreeDummyDataFlare;
+  const width = "100%";
+  const height = "100%";
 
   let format = d3.format(",d");
   const svgRef = useRef(null);
@@ -23,7 +23,7 @@ function ZoomableTreemap(props) {
       );
     };
 
-    const root = partition(d3TreeDummyDataFlare);
+    const root = partition(data);
     let focus = root;
     let color = d3.scaleOrdinal(
       d3.quantize(d3.interpolateRainbow, data.children.length + 1)
