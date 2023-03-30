@@ -1,40 +1,41 @@
-import { fullAncestor } from "acorn-walk";
 import axios from "axios";
 
-class Network {
-  static wikipediaEndpoint = "https://en.wikipedia.org/w/api.php";
-  static wikidataSearchEndpoint = "https://www.wikidata.org/w/api.php";
-  static wikidataSparqlEndpoint = "https://query.wikidata.org/sparql";
+class NetworkClient {
+  constructor() {
+    this.wikipediaEndpoint = "https://en.wikipedia.org/w/api.php";
+    this.wikidataSearchEndpoint = "https://www.wikidata.org/w/api.php";
+    this.sparqlEndpoint = "https://query.wikidata.org/sparql";
+  }
 
-  static async fetchData(url) {
+  static async get(endpoint, params ) {
     let data = null;
 
-    try {
-      const response = await axios.get(url);
-      data = response.data;
-    } catch (error) {
-      console.log(error);
+    if (endpoint == this.wikidataSearchEndpoint) {
+      try {
+        const fullUrl = endpoint + params;
+        console.log("before axios call");
+        const response = await axios.get(fullUrl);
+        console.log("after axios call");
+        data = response.data;
+        console.log("after data assignment", data);
+        return data.search;
+      } catch (error) {
+        console.log(error);
+      }
     }
 
-    return data.search;
-  }
-
-  static async sparqlQuery(sparqlQuery) {
-    const url = this.wikidataSparqlEndpoint;
-
-    const response = await axios.get(url, {
-      params: {
-        query: sparqlQuery,
-        format: "json",
-      },
-      headers: {
+    if (endpoint == this.sparqlEndpoint) {
+      const fullUrl = endpoint + "?query=" + encodeURIComponent(sparqlQuery);
+      const headers = {
         Accept: "application/sparql-results+json",
-      },
-    });
-    return response.data;
+      };
+
+      return fetch(fullUrl, { headers }).then((response) => response.json());
+    }
+
+    return data;
   }
 
-  // TODO: in ord
   static async getWikidataPageForwardLinks(pageId) {
     const params =
       "?action=parse" +
@@ -237,4 +238,4 @@ class Network {
   }
 }
 
-export default Network;
+export default NetworkClient;

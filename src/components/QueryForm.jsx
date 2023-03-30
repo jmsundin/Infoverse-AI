@@ -1,21 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
-import Network from "../utils/Network";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import wikidata from "../data/queryData";
 import { objectToGraphData } from "../utils/transformData";
-
 import DatalistInput from "react-datalist-input";
 
 import "../assets/QueryForm.css";
 
 const QueryForm = (props) => {
-  const [chosenChart, setChosenChart] = useState("Graph");
   const [searchOptions, setSearchOptions] = useState(wikidata.suggestedTopics);
+  const [searchOptionItems, setSearchOptionItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [selectedTopic, setSelectedTopic] = useState({
     id: null,
@@ -23,10 +16,14 @@ const QueryForm = (props) => {
     label: null,
   });
 
-  const [data, setData] = useState(null);
+  const [graphData, setGraphData] = useState(null);
 
-  const searchOptionItems = useMemo(() => {
-    return searchOptions.map((topic) => {
+  useEffect(() => {
+    props.onQuerySubmit(graphData);
+  }, [graphData]);
+
+  useEffect(() => {
+    const items = searchOptions.map((topic) => {
       return {
         id: topic.id,
         value: topic.value || topic.label,
@@ -39,23 +36,23 @@ const QueryForm = (props) => {
         ),
       };
     });
+    setSearchOptionItems(items);
   }, [searchOptions]);
 
-  const searchBoxAndDropdownList = useMemo(() => {
-    return (
-      <DatalistInput
-        label={false}
-        placeholder="Search for a topic to explore"
-        value={inputValue}
-        items={searchOptionItems}
-        onSelect={handleSelectedTopic}
-        onChange={handleInputChange}
-      />
-    );
-  }, [inputValue, searchOptionItems]);
+  const searchBoxAndDropdownList = (
+    <DatalistInput
+      label={false}
+      placeholder="Search for a topic to explore"
+      value={inputValue}
+      items={searchOptionItems}
+      onSelect={handleSelectedTopic}
+      onChange={handleInputChange}
+    />
+  );
 
   function handleInputChange(event) {
     setInputValue(event.target.value);
+    handleSearchInput(event.target.value);
   }
 
   function handleSelectedTopic(topic) {
@@ -71,9 +68,9 @@ const QueryForm = (props) => {
   }
 
   // live search for topics based on typed user input
-  useEffect(() => {
+  function handleSearchInput(inputValue) {
     if (inputValue !== null && inputValue !== undefined && inputValue !== "") {
-      async function fetchData() {
+      (async function fetchData() {
         const wikidataSearchEndpoint = "https://www.wikidata.org/w/api.php";
         const params =
           "?action=wbsearchentities" +
@@ -83,39 +80,38 @@ const QueryForm = (props) => {
           "&origin=*" +
           "&search=" +
           inputValue;
-        const url = wikidataSearchEndpoint + params;
-
-        const items = await Network.fetchData(url);
-        setSearchOptions(items);
-      }
-      fetchData();
+        // const items = await NetworkClient.get(wikidataSearchEndpoint, params);
+        if (wikidataSearchEndpoint == "https://www.wikidata.org/w/api.php") {
+          try {
+            const fullUrl = wikidataSearchEndpoint + params;
+            const response = await axios.get(fullUrl);
+            data = response.data;
+            setSearchOptions(data.search);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      })();
     }
-  }, [inputValue]);
-
-  const chartDropdownMenu = (
-    <div className="chart-menu">
-      <select
-        defaultValue={"Graph"}
-        className="chart-menu__btn"
-        onChange={(e) => setChosenChart(e.target.value)}
-      >
-        <option disabled>Select a Chart</option>
-        <option key="Graph" value="Graph" className="chart-menu__item">
-          Graph
-        </option>
-        <option key="Tree" value="Tree" className="chart-menu__item">
-          Tree
-        </option>
-        <option key="Table" value="Table" className="chart-menu__item">
-          Table
-        </option>
-      </select>
-    </div>
-  );
+  }
 
   const exploreButton = (
     <input type="submit" value="Explore" className="explore-button" />
   );
+
+  function handleData(data) {
+    const root = {
+      id: selectedTopic?.id,
+      label: selectedTopic?.label,
+      value: data?.results?.bindings?.length,
+      description: selectedTopic?.description,
+      url: selectedTopic?.url,
+    };
+
+    const graph = objectToGraphData(root, data?.results?.bindings);
+    setGraphData(graph);
+    props.onQuerySubmit(graph);
+  }
 
   function onSubmitHandler(e) {
     e.preventDefault();
@@ -123,35 +119,27 @@ const QueryForm = (props) => {
       alert("Please select a topic to explore");
       return;
     }
-    async function sparqlQuery() {
-      // P:279 is the property for subclass of
-      let sparqlQuery = `SELECT ?item ?itemLabel 
-        WHERE {
-          ?item p:P279 ?statement0.
-          ?statement0 (ps:P279/(wdt:P279*)) wd:${selectedTopic.id}.
-          SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
-        }
-      LIMIT 10`;
 
-      const data = await Network.sparqlQuery(sparqlQuery);
-      console.log("data bindings:", data.results.bindings);
+    (async function sparqlQuery() {
+      const endpoint = "https://query.wikidata.org/sparql";
+      const sparqlQuery = wikidata.propertyQueries.subClassOf.replaceAll(
+        "Q21198",
+        selectedTopic.id
+      );
 
-      const root = {
-        id: selectedTopic.id,
-        label: selectedTopic.label,
-        pageId,
-        url,
+      const fullUrl = endpoint + "?query=" + encodeURIComponent(sparqlQuery);
+      const headers = {
+        Accept: "application/sparql-results+json",
       };
-      const graphData = objectToGraphData(root, data.results.bindings);
-      setData(graphData);
-      console.log("graphData:", graphData);
-    }
-    sparqlQuery();
+
+      fetch(fullUrl, { headers })
+        .then((response) => response.json())
+        .then((data) => handleData(data));
+    })();
   }
 
   return (
     <form onSubmit={onSubmitHandler} className="query-form">
-      {chartDropdownMenu}
       {searchBoxAndDropdownList}
       {exploreButton}
     </form>
