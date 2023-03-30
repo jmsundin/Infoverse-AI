@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import isEqual from "lodash/isEqual";
 import differenceWith from "lodash/differenceWith";
 import { DataSet } from "vis-data/peer/esm/vis-data";
 import { Network } from "vis-network/peer/esm/vis-network";
 import PropTypes from "prop-types";
+
+import wikidata from "../data/queryData";
 
 import "vis-network/styles/vis-network.css";
 
@@ -25,17 +27,19 @@ const defaultOptions = {
   },
 };
 
-const Graph = ({
+export default function Graph({
   data,
   options = defaultOptions,
   events = {},
   style = { width: "100%", height: "100%" },
-  getNetwork,
-  getNodes,
-  getEdges,
-}) => {
-  const nodes = useRef(new DataSet(data.nodes));
-  const edges = useRef(new DataSet(data.edges));
+  getNetwork = {},
+  getNodes = {},
+  getEdges = {},
+}) {
+  const graphData = data || transformSuggestedTopicsToGraph();
+
+  const nodes = useRef(new DataSet(graphData.nodes));
+  const edges = useRef(new DataSet(graphData.edges));
   const network = useRef(null);
   const container = useRef(null);
 
@@ -45,78 +49,54 @@ const Graph = ({
       { nodes: nodes.current, edges: edges.current },
       options
     );
-
-    if (getNetwork) {
-      getNetwork(network.current);
-    }
-
-    if (getNodes) {
-      getNodes(nodes.current);
-    }
-
-    if (getEdges) {
-      getEdges(edges.current);
-    }
   }, []);
 
   useEffect(() => {
-    const nodesChange = !isEqual(nodes.current, data.nodes);
-    const edgesChange = !isEqual(edges.current, data.edges);
+    const nodesChange = !isEqual(nodes.current, graphData.nodes);
+    const edgesChange = !isEqual(edges.current, graphData.edges);
 
     if (nodesChange) {
       const idIsEqual = (n1, n2) => n1.id === n2.id;
       const nodesRemoved = differenceWith(
-        nodes.current.get(),
-        data.nodes,
+        nodes?.current.get(),
+        graphData.nodes,
         idIsEqual
       );
       const nodesAdded = differenceWith(
-        data.nodes,
-        nodes.current.get(),
+        graphData.nodes,
+        nodes?.current.get(),
         idIsEqual
       );
       const nodesChanged = differenceWith(
-        differenceWith(data.nodes, nodes.current.get(), isEqual),
+        differenceWith(graphData.nodes, nodes?.current.get(), isEqual),
         nodesAdded
       );
 
-      nodes.current.remove(nodesRemoved);
-      nodes.current.add(nodesAdded);
-      nodes.current.update(nodesChanged);
+      nodes?.current.remove(nodesRemoved);
+      nodes?.current.add(nodesAdded);
+      nodes?.current.update(nodesChanged);
     }
 
     if (edgesChange) {
       const edgesRemoved = differenceWith(
         edges.current.get(),
-        data.edges,
+        graphData.edges,
         isEqual
       );
       const edgesAdded = differenceWith(
-        data.edges,
+        graphData.edges,
         edges.current.get(),
         isEqual
       );
       const edgesChanged = differenceWith(
-        differenceWith(data.edges, edges.current.get(), isEqual),
+        differenceWith(graphData.edges, edges.current.get(), isEqual),
         edgesAdded
       );
       edges.current.remove(edgesRemoved);
       edges.current.add(edgesAdded);
       edges.current.update(edgesChanged);
     }
-
-    if ((nodesChange || edgesChange) && getNetwork) {
-      getNetwork(network.current);
-    }
-
-    if (nodesChange && getNodes) {
-      getNodes(nodes.current);
-    }
-
-    if (edgesChange && getEdges) {
-      getEdges(edges.current);
-    }
-  }, [data]);
+  }, [graphData]);
 
   useEffect(() => {
     network.current.setOptions(options);
@@ -137,7 +117,7 @@ const Graph = ({
   }, [events]);
 
   return <div ref={container} style={style} />;
-};
+}
 
 Graph.propTypes = {
   data: PropTypes.object,
@@ -149,4 +129,46 @@ Graph.propTypes = {
   getEdges: PropTypes.func,
 };
 
-export default Graph;
+function transformSuggestedTopicsToGraph(){
+  const root = {
+    id: "0",
+    label: "Suggested Topics to Explore",
+    value: wikidata.suggestedTopics.length,
+    description: "Suggested Topics to Explore",
+    pageId: "0",
+    url: "https://en.wikipedia.org/wiki/Special:Random",
+  };
+
+  let data = wikidata.suggestedTopics;
+
+  let suggestedGraphData = {
+    nodes: [],
+    edges: [],
+  };
+
+  suggestedGraphData.nodes.push(root);
+
+  if (data.length > 0) {
+    data.forEach((item) => {
+      let newNode = {};
+      newNode.id = item.id;
+      newNode.value = 1;
+      newNode.label = item.label;
+      newNode.title = item.label + ": " + item.description;
+      newNode.description = item.description;
+      newNode.pageId = item.pageId;
+      newNode.url = item.url;
+
+      suggestedGraphData.nodes.push(newNode);
+    });
+
+    data.forEach((item) => {
+      let newEdge = {};
+      newEdge.from = root.id;
+      newEdge.to = item.id;
+
+      suggestedGraphData.edges.push(newEdge);
+    });
+  }
+  return suggestedGraphData;
+};

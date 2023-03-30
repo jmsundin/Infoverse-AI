@@ -8,5 +8,6 @@
     ".vue",
     ".scss",
     ".less"
-  ]
+  ],
+  "entryFilePath": "/src/App.jsx"
 }
