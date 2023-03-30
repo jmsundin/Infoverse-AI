@@ -48,6 +48,9 @@ span.bar:nth-child(3) {
 .bm-burger-button {
   width: 1.5rem;
   height: 1.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 /* Color/shape of burger icon bars on hover*/
