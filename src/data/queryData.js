@@ -258,26 +258,36 @@ const wikidata = {
     },
   ],
   propertyQueries: {
-    subClassOf: [`SELECT ?item ?itemLabel ?description WHERE {
-      ?item wdt:P279 wd:`,`.
-      ?item schema:description ?description .
-      `],
-    hasParts: [`SELECT ?part ?partLabel ?partDescription WHERE {
-      wd:`, `wdt:P527 ?part .
-      ?part schema:description ?partDescription .
-      FILTER (lang(?description) = "en")
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-    }`],
-    partOf: [`SELECT ?part ?partLabel ?partDescription WHERE {
-      wd:`,`wdt:P361 ?part . 
-      wd:`, `wdt:P361 ?part .
-      ?part schema:description ?partDescription .
-      FILTER (lang(?description) = "en")
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-    }`],
-    isTheStudyOf: [`SELECT ?topic ?topicLabel ?topicDescription ?isTheStudyOfLabel ?isTheStudyOfDescription WHERE {
-      wd:`, `wdt:P2578 ?isTheStudyOf .
-    }`],
+    subClassOf: `PREFIX schema: <http://schema.org/>
+      SELECT ?item ?itemLabel ?description WHERE {
+        ?item wdt:P279 wd:Q21198 .
+        ?item schema:description ?description .
+        FILTER (lang(?description) = "en")
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+      }
+      LIMIT 100`,
+    hasParts: `PREFIX schema: <http://schema.org/>
+      SELECT ?part ?partLabel ?partDescription WHERE {
+        wd:Q21198 wdt:P527 ?part .
+        ?part schema:description ?partDescription .
+        FILTER (lang(?description) = "en")
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+      }
+      LIMIT 100`,
+    partOf: `PREFIX schema: <http://schema.org/>
+      SELECT ?part ?partLabel ?partDescription WHERE {
+        wd:Q21198 wdt:P361 ?part . 
+        wd:Q21198 wdt:P361 ?part .
+        ?part schema:description ?partDescription .
+        FILTER (lang(?description) = "en")
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+      }
+      LIMIT 100`,
+    isTheStudyOf: `PREFIX schema: <http://schema.org/>
+      SELECT ?topic ?topicLabel ?topicDescription ?isTheStudyOfLabel ?isTheStudyOfDescription WHERE {
+        wd:Q21198 wdt:P2578 ?isTheStudyOf .
+      }
+      LIMIT 100`,
   },
 };
 
