@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // https://www.npmjs.com/package/react-burger-menu
-import { slide as Menu } from "react-burger-menu";
+import { slide as SideMenu } from "react-burger-menu";
 import { useMediaQuery } from "react-responsive";
 
 import "../assets/NavMenu.css";
@@ -81,7 +81,7 @@ const NavMenu = () => {
     <header className="main-header">
       <nav className="main-nav-container">
         {headerLogo}
-        <Menu
+        <SideMenu
           customBurgerIcon={hamburgerMenu}
           customCrossIcon={crossIcon}
           isOpen={isOpen}
@@ -90,7 +90,7 @@ const NavMenu = () => {
           right
         >
           {menuItems}
-        </Menu>
+        </SideMenu>
       </nav>
     </header>
   );
