@@ -1,4 +1,4 @@
-export default GraphParams = {
+const GraphParams = {
   events: {
     click: function (params) {
       console.log("click Event:", params);
@@ -134,3 +134,5 @@ export default GraphParams = {
     },
   },
 };
+
+export default GraphParams;
