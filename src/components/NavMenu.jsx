@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // https://www.npmjs.com/package/react-burger-menu
 import { slide as SideMenu } from "react-burger-menu";
-import { useMediaQuery } from "react-responsive";
 
 import "../assets/NavMenu.css";
 import "../assets/HamburgerMenu.css";
 
 const NavMenu = () => {
-  const isDesktopLaptopOrTablet = useMediaQuery({
-    query: "(min-width: 501px)",
-  });
-  const isMobile = useMediaQuery({ query: "(max-width: 500px)" });
-
   const [isOpen, setIsOpen] = useState(false);
-
+  
   const onOpenMenuHandler = () => {
     setIsOpen(true);
   };
