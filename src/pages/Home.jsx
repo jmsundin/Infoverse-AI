@@ -11,15 +11,16 @@ import { wikidata } from "../data/queryData";
 import "./Home.css";
 
 const Home = () => {
+  const suggestedTopicsRoot = {
+    id: "0",
+    label: "Suggested Topics",
+    value: wikidata.suggestedTopics.length,
+    description: "Suggested Topics to Explore",
+    pageId: "0",
+    url: "https://www.wikidata.org/wiki/Q0",
+  };
   const data = transformSuggestedTopicsToGraph(
-    (suggestedTopicsRoot = {
-      id: "0",
-      label: "Suggested Topics",
-      value: wikidata.suggestedTopics.length,
-      description: "Suggested Topics to Explore",
-      pageId: "0",
-      url: "https://www.wikidata.org/wiki/Q0",
-    }),
+    suggestedTopicsRoot,
     wikidata.suggestedTopics
   );
   const [graphData, setGraphData] = useState(data);
