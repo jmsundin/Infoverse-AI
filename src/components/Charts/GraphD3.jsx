@@ -1,8 +1,8 @@
 import uuid from "react-uuid";
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { transformDataForD3Graph } from "../utils/transformData";
-import miserablesDummyData from "../data/miserables-d3-force-directed-graph";
+import { transformDataForD3Graph } from "../../utils/transformData";
+import miserablesDummyData from "../../data/miserables-d3-force-directed-graph";
 
 // d3 force graph
 const GraphD3 = (props) => {

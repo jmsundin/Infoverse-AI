@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { transformDataForD3ReactTree } from "../utils/transformData";
-import d3TreeDummyDataFlare from "../data/d3TreeDummyDataFlare-2";
+import { transformDataForD3ReactTree } from "../../utils/transformData";
+import d3TreeDummyDataFlare from "../../data/d3TreeDummyDataFlare-2";
 import { svg } from "d3";
 
 function ZoomableTreemap(props) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { transformDataForD3ReactTree } from "../utils/transformData";
+import { transformDataForD3ReactTree } from "../../utils/transformData";
 import * as d3 from "d3";
 import Tree from "react-d3-tree";
 

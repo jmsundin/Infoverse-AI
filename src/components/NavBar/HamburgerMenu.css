@@ -1,4 +1,4 @@
-.hamburger-menu {
+.hamburger-menu-icon {
   width: 1.5rem;
   height: 1.5rem;
   cursor: pointer;
@@ -46,9 +46,9 @@ span.bar:nth-child(3) {
 
 /* Position and sizing of burger button */
 .bm-burger-button {
+  position: absolute;
   width: 1.5rem;
   height: 1.5rem;
-  position: absolute;
   top: 0;
   right: 0;
 }
@@ -83,7 +83,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 /* General sidebar styles */
 .bm-menu {
-  background: #373a47;
+  background: radial-gradient(
+      circle at 3% 25%,
+      rgba(0, 40, 83, 1) 0%,
+      rgba(4, 12, 24, 1) 100%
+    );
   font-size: 1.4rem;
   text-decoration: none;
   width: 100%;

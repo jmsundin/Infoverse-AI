@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import NavMenu from "../components/NavMenu";
-import "../assets/Contact.css";
+import NavBar from "../components/NavBar/NavBar";
+import "./Contact.css";
 
-import profilePic from "../assets/profile-pic.png";
+import profilePic from "../assets/me-profile1-bg-200x267.jpeg";
 
 const ContactPage = () => {
+  const [page, setPage] = useState("Contact");
   return (
     <React.Fragment>
-      <NavMenu />
-      <div className="contact-section">
+      <NavBar page={page}/>
+      <div className="gradient__bg contact-section">
         <div className="contact-section__header">
           <div className="card">
             <img
               src={profilePic}
+              width="200"  
+              height="200"
               className="profile-pic"
               alt="A picture of Jon Sundin"
             />
@@ -26,7 +29,7 @@ const ContactPage = () => {
             </ul>
           </div>
         </div>
-        <div className="contact-section__footer">
+        <div className="gradient__bg contact-section__footer">
           <div className="card">
             <div>
               <strong>E-Mail: </strong>
