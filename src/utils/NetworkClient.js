@@ -7,33 +7,31 @@ class NetworkClient {
     this.sparqlEndpoint = "https://query.wikidata.org/sparql";
   }
 
-  static async get(endpoint, params ) {
+  static async get(endpoint, params) {
     let data = null;
 
     if (endpoint == this.wikidataSearchEndpoint) {
       try {
         const fullUrl = endpoint + params;
-        console.log("before axios call");
         const response = await axios.get(fullUrl);
-        console.log("after axios call");
         data = response.data;
-        console.log("after data assignment", data);
         return data.search;
       } catch (error) {
         console.log(error);
       }
     }
-
-    if (endpoint == this.sparqlEndpoint) {
-      const fullUrl = endpoint + "?query=" + encodeURIComponent(sparqlQuery);
-      const headers = {
-        Accept: "application/sparql-results+json",
-      };
-
-      return fetch(fullUrl, { headers }).then((response) => response.json());
-    }
-
     return data;
+  }
+
+  static async sparqlQuery(endpoint, sparqlQuery, handleData) {
+    const fullUrl = endpoint + "?query=" + encodeURIComponent(sparqlQuery);
+    const headers = {
+      Accept: "application/sparql-results+json",
+    };
+
+    fetch(fullUrl, { headers })
+      .then((response) => response.json())
+      .then((data) => handleData(data));
   }
 
   static async getWikidataPageForwardLinks(pageId) {
