@@ -1,0 +1,139 @@
+.hamburger-menu-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+span.bar:nth-child(1) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.2rem;
+  padding: 0;
+  margin: 0;
+  background: white;
+  opacity: 1;
+}
+
+span.bar:nth-child(2) {
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.2rem;
+  padding: 0;
+  margin: 0;
+  background: white;
+  opacity: 1;
+}
+
+span.bar:nth-child(3) {
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.2rem;
+  padding: 0;
+  margin: 0;
+  background: white;
+  opacity: 1;
+}
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 0;
+  right: 0;
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: none;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  color: white;
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 200px;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: radial-gradient(
+      circle at 3% 25%,
+      rgba(0, 40, 83, 1) 0%,
+      rgba(4, 12, 24, 1) 100%
+    );
+  font-size: 1.4rem;
+  text-decoration: none;
+  width: 100%;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  list-style: none;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  align-items: center;
+  list-style: none;
+  text-decoration: none;
+}
+
+.bm-item ul {
+  display: inline-block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bm-item a {
+  color: white;
+  text-decoration: none;
+}
+
+.bm-item a:hover {
+  color: #b8b7ad;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  display: none;
+}
