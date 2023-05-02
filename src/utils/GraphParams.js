@@ -1,78 +1,6 @@
 const GraphParams = {
-  events: {
-    click: function (params) {
-      console.log("click Event:", params);
-      console.log(params.nodes[0]);
-      
-    },
-    doubleClick: function (params) {
-      // params.event = "[original event]";
-    },
-    oncontext: function (params) {
-      // params.event = "[original event]";
-    },
-    dragStart: function (params) {
-      // There's no point in displaying this event on screen, it gets immediately overwritten
-      // params.event = "[original event]";
-    },
-    dragging: function (params) {
-      // params.event = "[original event]";
-    },
-    dragEnd: function (params) {
-      // params.event = "[original event]";
-    },
-    controlNodeDragging: function (params) {
-      // params.event = "[original event]";
-    },
-    controlNodeDragEnd: function (params) {
-      // params.event = "[original event]";
-    },
-    zoom: function (params) {
-      // console.log("zoom Event:", params);
-    },
-    showPopup: function (params) {
-      // console.log('showPopup Event:', params);
-    },
-    hidePopup: function () {
-      // console.log('hidePopup Event');
-    },
-    select: function (params) {
-      // console.log("select Event:", params);
-    },
-    selectNode: function (params) {
-      // console.log("selectNode Event:", params);
-      
-    },
-    selectEdge: function (params) {
-      // console.log("selectEdge Event:", params);
-    },
-    deselectNode: function (params) {
-      // console.log("deselectNode Event:", params);
-    },
-    deselectEdge: function (params) {
-      // console.log("deselectEdge Event:", params);
-    },
-    hoverNode: function (params) {
-      // console.log("hoverNode Event:", params);
-    },
-    hoverEdge: function (params) {
-      // console.log("hoverEdge Event:", params);
-    },
-    blurNode: function (params) {
-      // console.log("blurNode Event:", params);
-    },
-    blurEdge: function (params) {
-      // console.log("blurEdge Event:", params);
-    },
-  },
-
+  style: { width: "100%", height: "100%" },
   options: {
-    // layout: {
-    //   hierarchical: {
-    //     direction: "LR",
-    //     sortMethod: "directed",
-    //   },
-    // },
     interaction: {
       dragNodes: true,
       dragView: true,
@@ -82,13 +10,13 @@ const GraphParams = {
       hover: true,
       hoverConnectedEdges: true,
       keyboard: {
-        enabled: false,
+        enabled: true,
         speed: { x: 10, y: 10, zoom: 0.02 },
         bindToWindow: true,
         autoFocus: true,
       },
       multiselect: false,
-      navigationButtons: true,
+      navigationButtons: false,
       selectable: true,
       selectConnectedEdges: true,
       tooltipDelay: 200,
@@ -96,17 +24,57 @@ const GraphParams = {
       zoomView: true,
     },
     physics: {
-      stabilization: false,
+      enabled: true,
+      solver: "forceAtlas2Based",
+      forceAtlas2Based: {
+        theta: 0.5,
+        gravitationalConstant: -30,
+        centralGravity: 0.01,
+        springLength: 100,
+        springConstant: 0.1,
+        avoidOverlap: 0,
+      },
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        fit: true,
+      },
+      adaptiveTimestep: true,
     },
     autoResize: false,
     nodes: {
-      shape: "ellipse",
+      mass: 2,
+      font: {
+        size: 24,
+        color: "#000000",
+      },
+      margin: {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10,
+      },
+      borderWidth: 1.5,
+      color: {
+        background: "#dbe6ff",
+        hover: {
+          background: "#92b6ff",
+        },
+        highlight: {
+          background: "#92b6ff",
+        },
+      },
+      heightConstraint: {
+        minimum: 20,
+        valign: "middle",
+      },
+      shape: "box",
       scaling: {
-        min: 14,
-        max: 20,
+        min: 15,
+        max: 36,
         label: {
-          min: 14,
-          max: 20,
+          min: 15,
+          max: 36,
           maxVisible: 20,
           drawThreshold: 5,
         },
@@ -121,17 +89,39 @@ const GraphParams = {
       },
     },
     edges: {
-      smooth: false,
-      color: "#000000",
-      width: 0.5,
-      length: 250,
+      smooth: true,
+      color: "#92b6ff",
+      width: 0.8,
+      length: 200,
       arrows: {
         to: {
           enabled: true,
-          scaleFactor: 0.5,
+          scaleFactor: 0.4,
         },
       },
     },
+  },
+  events: {
+    click: function (params) {},
+    doubleClick: function (params) {},
+    oncontext: function (params) {},
+    dragStart: function (params) {},
+    dragging: function (params) {},
+    dragEnd: function (params) {},
+    controlNodeDragging: function (params) {},
+    controlNodeDragEnd: function (params) {},
+    zoom: function (params) {},
+    showPopup: function (params) {},
+    hidePopup: function () {},
+    select: function (params) {},
+    selectNode: function (params) {},
+    selectEdge: function (params) {},
+    deselectNode: function (params) {},
+    deselectEdge: function (params) {},
+    hoverNode: function (params) {},
+    hoverEdge: function (params) {},
+    blurNode: function (params) {},
+    blurEdge: function (params) {},
   },
 };
 
