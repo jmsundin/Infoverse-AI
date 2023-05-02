@@ -1,4 +1,171 @@
-const wikidata = {
+export const neuroscience = {
+  name: "Neuroscience",
+  id: "1",
+  children: [
+    {
+      name: "Neuroanatomy",
+      id: "2",
+      children: [
+        { name: "Neurons", id: "3" },
+        { name: "Synapses", id: "4" },
+        { name: "Glia", id: "5" },
+        { name: "Brain regions", id: "6" },
+        { name: "Spinal cord", id: "7" },
+        { name: "Peripheral nervous system", id: "8" },
+        { name: "Neural circuits", id: "9" },
+        { name: "Neurotransmitters", id: "10" },
+        { name: "Receptors", id: "11" },
+        { name: "Neural development", id: "12" },
+      ],
+    },
+    {
+      name: "Neurophysiology",
+      id: "13",
+      children: [
+        { name: "Action potentials", id: "14" },
+        { name: "Synaptic transmission", id: "15" },
+        { name: "Neuroplasticity", id: "16" },
+        { name: "Neurotransmitter release", id: "17" },
+        { name: "Electrophysiology", id: "18" },
+        { name: "Neural oscillations", id: "19" },
+        { name: "Sensory processing", id: "20" },
+        { name: "Motor control", id: "21" },
+        { name: "Homeostasis", id: "22" },
+        { name: "Neuromodulation", id: "23" },
+      ],
+    },
+    {
+      name: "Cognitive neuroscience",
+      id: "24",
+      children: [
+        { name: "Perception", id: "25" },
+        { name: "Attention", id: "26" },
+        { name: "Memory", id: "27" },
+        { name: "Emotion", id: "28" },
+        { name: "Language", id: "29" },
+        { name: "Executive functions", id: "30" },
+        { name: "Social cognition", id: "31" },
+        { name: "Consciousness", id: "32" },
+        { name: "Decision-making", id: "33" },
+        { name: "Learning", id: "34" },
+      ],
+    },
+    {
+      name: "Neuropharmacology",
+      id: "35",
+      children: [
+        { name: "Psychopharmacology", id: "36" },
+        { name: "Drug receptors", id: "37" },
+        { name: "Drug metabolism", id: "38" },
+        { name: "Neurotransmitter systems", id: "39" },
+        { name: "Neuropsychiatric medications", id: "40" },
+        { name: "Addiction", id: "41" },
+        { name: "Neurotoxins", id: "42" },
+        { name: "Neuroprotection", id: "43" },
+        { name: "Psychoactive substances", id: "44" },
+        { name: "Pharmacogenetics", id: "45" },
+      ],
+    },
+    {
+      name: "Neuroimaging",
+      id: "46",
+      children: [
+        { name: "MRI", id: "47" },
+        { name: "fMRI", id: "48" },
+        { name: "PET", id: "49" },
+        { name: "SPECT", id: "50" },
+        { name: "EEG", id: "51" },
+        { name: "MEG", id: "52" },
+        { name: "NIRS", id: "53" },
+        { name: "Optogenetics", id: "54" },
+        { name: "Diffusion imaging", id: "55" },
+        { name: "Functional connectivity", id: "56" },
+      ],
+    },
+    {
+      name: "Neuropsychology",
+      id: "57",
+      children: [
+        { name: "Brain disorders", id: "58" },
+        { name: "Cognitive deficits", id: "59" },
+        { name: "Neuropsychological assessment", id: "60" },
+        { name: "Rehabilitation", id: "61" },
+        { name: "Traumatic brain injury", id: "62" },
+        { name: "Neurodevelopmental disorders", id: "63" },
+        { name: "Neurodegenerative disorders", id: "64" },
+        { name: "Stroke", id: "65" },
+        { name: "Epilepsy", id: "66" },
+        { name: "Psychiatric disorders", id: "67" },
+      ],
+    },
+    {
+      name: "Computational neuroscience",
+      id: "68",
+      children: [
+        { name: "Neural networks", id: "69" },
+        { name: "Neural coding", id: "70" },
+        { name: "Brain-computer interfaces", id: "71" },
+        { name: "Artificial intelligence", id: "72" },
+        { name: "Neurorobotics", id: "73" },
+        { name: "Neuromorphic engineering", id: "74" },
+        { name: "Neural simulation", id: "75" },
+        { name: "Connectomics", id: "76" },
+        { name: "Information theory", id: "77" },
+        { name: "Neurodynamics", id: "78" },
+      ],
+    },
+    {
+      name: "Molecular neuroscience",
+      id: "79",
+      children: [
+        { name: "Gene expression", id: "80" },
+        { name: "Epigenetics", id: "81" },
+        { name: "Protein synthesis", id: "82" },
+        { name: "Neurogenetics", id: "83" },
+        { name: "Neuropeptides", id: "84" },
+        { name: "Neurotrophic factors", id: "85" },
+        { name: "Ion channels", id: "86" },
+        { name: "Neurotransmitter synthesis", id: "87" },
+        { name: "Signal transduction", id: "88" },
+        { name: "Neural stem cells", id: "89" },
+      ],
+    },
+    {
+      name: "Behavioral neuroscience",
+      id: "90",
+      children: [
+        { name: "Neuroethology", id: "91" },
+        { name: "Learning and memory", id: "92" },
+        { name: "Motivation", id: "93" },
+        { name: "Emotion and stress", id: "94" },
+        { name: "Sleep and circadian rhythms", id: "95" },
+        { name: "Neuroendocrinology", id: "96" },
+        { name: "Sensory systems", id: "97" },
+        { name: "Neuropsychopharmacology", id: "98" },
+        { name: "Animal models", id: "99" },
+        { name: "Social behavior", id: "100" },
+      ],
+    },
+    {
+      name: "Clinical neuroscience",
+      id: "101",
+      children: [
+        { name: "Neurology", id: "102" },
+        { name: "Psychiatry", id: "103" },
+        { name: "Neurosurgery", id: "104" },
+        { name: "Neurorehabilitation", id: "105" },
+        { name: "Neuro-oncology", id: "106" },
+        { name: "Neuro-ophthalmology", id: "107" },
+        { name: "Neuropsychiatry", id: "108" },
+        { name: "Neurointervention", id: "109" },
+        { name: "Neuroimmunology", id: "110" },
+        { name: "Neuropathology", id: "111" },
+      ],
+    },
+  ],
+};
+
+export const wikidata = {
   suggestedTopics: [
     {
       id: "Q333",
@@ -137,7 +304,7 @@ const wikidata = {
     },
     {
       id: "Q11190",
-      value: "Medicine",
+      value: null,
       label: "Medicine",
       description:
         "application of knowledge for the diagnosis, treatment, and prevention of disease",
@@ -145,13 +312,13 @@ const wikidata = {
       pageId: 11190,
     },
     {
-      id: "Q638",
-      value: "Music",
-      label: "Music",
+      id: "Q188451",
+      value: null,
+      label: "music genre",
       description:
-        "art of sound in time that expresses ideas and emotions in significant forms through the elements of rhythm, melody, harmony, and color",
-      url: "https://www.wikidata.org/wiki/Q638",
-      pageId: 638,
+        "category that identifies pieces of music as belonging to a shared tradition or set of conventions",
+      url: "https://www.wikidata.org/wiki/Q188451",
+      pageId: 188451,
     },
     {
       id: "Q207011",
@@ -265,7 +432,7 @@ const wikidata = {
         FILTER (lang(?description) = "en")
         SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
       }
-      LIMIT 100`,
+      LIMIT 25`,
     hasParts: `PREFIX schema: <http://schema.org/>
       SELECT ?part ?partLabel ?partDescription WHERE {
         wd:Q21198 wdt:P527 ?part .
@@ -273,7 +440,7 @@ const wikidata = {
         FILTER (lang(?description) = "en")
         SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
       }
-      LIMIT 100`,
+      LIMIT 25`,
     partOf: `PREFIX schema: <http://schema.org/>
       SELECT ?part ?partLabel ?partDescription WHERE {
         wd:Q21198 wdt:P361 ?part . 
@@ -282,13 +449,11 @@ const wikidata = {
         FILTER (lang(?description) = "en")
         SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
       }
-      LIMIT 100`,
+      LIMIT 25`,
     isTheStudyOf: `PREFIX schema: <http://schema.org/>
       SELECT ?topic ?topicLabel ?topicDescription ?isTheStudyOfLabel ?isTheStudyOfDescription WHERE {
         wd:Q21198 wdt:P2578 ?isTheStudyOf .
       }
-      LIMIT 100`,
+      LIMIT 25`,
   },
 };
-
-export default wikidata;
