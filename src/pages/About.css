@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.header__content h2 {
+  color: var(--gradient-text);
+}
+
 .header__content p {
   color: #81afdd;
   padding-bottom: 2rem;
@@ -19,6 +23,7 @@
 }
 
 .about-section h2 {
+    color: var(--gradient-text);
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
