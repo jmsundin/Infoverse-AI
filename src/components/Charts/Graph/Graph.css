@@ -1,0 +1,17 @@
+div.vis-tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 5px;
+    font: 14px;
+    font-family: verdana;
+    white-space: nowrap;
+    color: #000000;
+    background-color: #dbe6ff;
+    border: 0px none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 5;
+}
