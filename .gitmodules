@@ -1,3 +1,0 @@
-[submodule "src/components/Charts/Graph/vis-network"]
-	path = src/components/Charts/Graph/vis-network
-	url = https://github.com/visjs/vis-network.git
